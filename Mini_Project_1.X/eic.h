@@ -2,6 +2,7 @@
 #define EIC_H
 
 #include "init_io.h"
+#include "sw_fcns.h"
 
 void __attribute__((interrupt())) EIC_EXTINT_2_Handler(void) {
     /*
@@ -9,8 +10,7 @@ void __attribute__((interrupt())) EIC_EXTINT_2_Handler(void) {
  * Thread mode, Handler mode is always privileged. Thus, secure access
  * to registers is always assumed inside the IRQ. 
  */
-    
-    while(PORT_SEC_REGS -> GROUP[0].PORT_IN & (0 << 23));
+   
     
     // Switch 1
     if (EIC_SEC_REGS->EIC_INTFLAG |= (1 << 0)){

@@ -5,7 +5,9 @@
 #include "adc.h"
 #include "clk.h"
 
-void Start(int brightness){
+extern volatile unsigned int brightness;
+
+void Start(void){
     /*
      * Initializes the clock, pin, ADC, and EIC.
      * 
