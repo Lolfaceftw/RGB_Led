@@ -104,14 +104,14 @@ endif
 # ------------------------------------------------------------------------------------
 # Rules for buildStep: compile
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
-${OBJECTDIR}/mini_project_1.o: mini_project_1.c  .generated_files/flags/default/7748a1f6b202328a1523e9d93e0105c096590a8f .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+${OBJECTDIR}/mini_project_1.o: mini_project_1.c  .generated_files/flags/default/c65943571f69580e7c049a070998b42a5bce9935 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/mini_project_1.o.d 
 	@${RM} ${OBJECTDIR}/mini_project_1.o 
 	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -fno-common -MP -MMD -MF "${OBJECTDIR}/mini_project_1.o.d" -o ${OBJECTDIR}/mini_project_1.o mini_project_1.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
 	
 else
-${OBJECTDIR}/mini_project_1.o: mini_project_1.c  .generated_files/flags/default/db12190e6b32d5d2341572906b9a671f5ab7ec0f .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+${OBJECTDIR}/mini_project_1.o: mini_project_1.c  .generated_files/flags/default/1d807279b97c33346ea92adf6ab1c0b1a17c73d1 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/mini_project_1.o.d 
 	@${RM} ${OBJECTDIR}/mini_project_1.o 
