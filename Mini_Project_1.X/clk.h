@@ -24,8 +24,22 @@ void TCC3_Init(int brightness) {
     
     /* Configure duty cycle values */    
     TCC3_REGS->TCC_PER = INIT_TOP; // Set the period value
-    TCC3_REGS->TCC_CC[1] = brightness; // Set the capture / compare register 0 or counter value       
     
+    /*
+     * PA03 - TCC3/WO[1]
+     * PA06 - TCC3/WO[4]
+     * PB03 - TCC3/WO[3]
+     */
+    
+    /* Set the duty cycle or brightness @ default 50% */
+    // PA03
+    TCC3_REGS->TCC_CC[1] = brightness;
+    
+    // PA06
+    TCC3_REGS->TCC_CC[4] = brightness;
+    
+    // PB03
+    TCC3_REGS->TCC_CC[3] = brightness;  
     /* TCC enable */
     TCC3_REGS->TCC_CTRLA |= (1 << 1); // Enables TCC
     while(TCC3_REGS->TCC_SYNCBUSY & ~(1<<1)); // Wait for synchronization

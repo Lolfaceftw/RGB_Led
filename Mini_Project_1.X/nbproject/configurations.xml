@@ -14,15 +14,14 @@
                    displayName="Linker Files"
                    projectFiles="true">
     </logicalFolder>
-    <logicalFolder name="SourceFiles"
-                   displayName="Source Files"
-                   projectFiles="true">
+    <logicalFolder name="SourceFiles" displayName="PA_04" projectFiles="true">
       <itemPath>mini_project_1.c</itemPath>
       <itemPath>pin_calculation.h</itemPath>
       <itemPath>eic.h</itemPath>
       <itemPath>init_io.h</itemPath>
       <itemPath>clk.h</itemPath>
       <itemPath>adc.h</itemPath>
+      <itemPath>sw_fcns.h</itemPath>
     </logicalFolder>
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>
@@ -36,7 +35,7 @@
         <platformTool>nEdbgTool</platformTool>
         <languageToolchain>XC32</languageToolchain>
         <languageToolchainVersion>4.45</languageToolchainVersion>
-        <platform>3</platform>
+        <platform>2</platform>
       </toolsSet>
       <packs>
         <pack name="PIC32CM-LS_DFP" vendor="Microchip" version="1.3.278"/>
