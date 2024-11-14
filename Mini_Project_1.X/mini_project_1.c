@@ -13,26 +13,6 @@
  */
  
 #define INIT_TOP 468 // Let x be the PER value, $100=\frac{48e6}{1024(x+1)}$
- 
-/*
-void GCLK_Init(void);
-void Clock_Source(void);
-void PA_03_Init(void); // "R" Channel, active-HI
-void PA_06_Init(void); // "G" Channel, active-HI
-void PB_03_Init(void); // "B" Channel, active-HI
-void PB_02_Init(void); // Potentiometer Input
-void SW_Init(void); // Initializes the switches
-void TCC3_Init(void);
-void Adjust_Brightness(void);
-
-// Interrupts
-void __attribute__((interrupt())) EIC_EXTINT_2_Handler(void);
-void EIC_Initialize(void);
-void NVIC_Initialize(void);
-// End Interrupts
-
-
-*/
 
 volatile unsigned int brightness = 234; // Initial of 50% brightness.
 volatile unsigned int decreasing_brightness = 0;
@@ -71,21 +51,7 @@ int main(int argc, char** argv) {
     GCLK_REGS -> GCLK_PCHCTRL[23] = (1 << 6); // Bit 6 Enable
     while ((GCLK_REGS -> GCLK_PCHCTRL [23] * (1 << 6)) == 0);
     
-    // Setting up the TC 0 -> CTRLA Register
-    TC0_REGS -> COUNT16.TC_CTRLA = (1); // Software Reset; Bit 0
-    while(TC0_REGS -> COUNT16.TC_SYNCBUSY & (1));
-    
-    TC0_REGS -> COUNT16.TC_CTRLA = (0x0 << 2); // Set to 16 bit mode; Bit[3:2].
-    TC0_REGS -> COUNT16.TC_CTRLA = (0x1 << 4); // Reset counter on next prescaler clock Bit[5:4]]
-    TC0_REGS -> COUNT16.TC_CTRLA = (0x7 << 8); // Prescaler Factor: 1024 Bit[10:8]]
-    
-    // Setting up the WAVE Register
-    TC0_REGS -> COUNT16.TC_WAVE = (0x1 << 0); // Use MFRQ Bit [1:0]
-    
-    // Setting the Top Value
-    TC0_REGS -> COUNT16.TC_CC[0] = 0x5B8D; // Set CC0 Top Value = 46875 for 48MHz
-    
-    TC0_REGS -> COUNT16.TC_CTRLA |= (1 << 1); // Enable TC0 Peripheral Bit 1
+    TC0_Init();
     
     /* To enable the filter and debouncer in EIC, the GCLK_EIC should be enabled */
     GCLK_REGS->GCLK_PCHCTRL[4] = 0x00000040;

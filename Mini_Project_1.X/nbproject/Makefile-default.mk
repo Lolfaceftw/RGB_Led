@@ -19,7 +19,7 @@ endif
 endif
 
 # Environment
-MKDIR=gnumkdir -p
+MKDIR=mkdir -p
 RM=rm -f 
 MV=mv 
 CP=cp 
@@ -104,14 +104,14 @@ endif
 # ------------------------------------------------------------------------------------
 # Rules for buildStep: compile
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
-${OBJECTDIR}/mini_project_1.o: mini_project_1.c  .generated_files/flags/default/c65943571f69580e7c049a070998b42a5bce9935 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+${OBJECTDIR}/mini_project_1.o: mini_project_1.c  .generated_files/flags/default/4071d9ec875f42634a728927cf10fdade676d11 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/mini_project_1.o.d 
 	@${RM} ${OBJECTDIR}/mini_project_1.o 
 	${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG   -x c -c -mprocessor=$(MP_PROCESSOR_OPTION)  -fno-common -MP -MMD -MF "${OBJECTDIR}/mini_project_1.o.d" -o ${OBJECTDIR}/mini_project_1.o mini_project_1.c    -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -mdfp="${DFP_DIR}/PIC32CM-LS00" ${PACK_COMMON_OPTIONS} 
 	
 else
-${OBJECTDIR}/mini_project_1.o: mini_project_1.c  .generated_files/flags/default/1d807279b97c33346ea92adf6ab1c0b1a17c73d1 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+${OBJECTDIR}/mini_project_1.o: mini_project_1.c  .generated_files/flags/default/4859370ae0b9f0471654648a44cac5ac2505f823 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/mini_project_1.o.d 
 	@${RM} ${OBJECTDIR}/mini_project_1.o 
@@ -136,7 +136,7 @@ else
 ${DISTDIR}/Mini_Project_1.X.${IMAGE_TYPE}.${OUTPUT_SUFFIX}: ${OBJECTFILES}  nbproject/Makefile-${CND_CONF}.mk   
 	@${MKDIR} ${DISTDIR} 
 	${MP_CC} $(MP_EXTRA_LD_PRE)  -mprocessor=$(MP_PROCESSOR_OPTION)  -o ${DISTDIR}/Mini_Project_1.X.${IMAGE_TYPE}.${DEBUGGABLE_SUFFIX} ${OBJECTFILES_QUOTED_IF_SPACED}          -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -Wl,--defsym=__MPLAB_BUILD=1$(MP_EXTRA_LD_POST)$(MP_LINKER_FILE_OPTION),-Map="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map",--memorysummary,${DISTDIR}/memoryfile.xml -mdfp="${DFP_DIR}/PIC32CM-LS00"
-	${MP_CC_DIR}\\xc32-bin2hex ${DISTDIR}/Mini_Project_1.X.${IMAGE_TYPE}.${DEBUGGABLE_SUFFIX} 
+	${MP_CC_DIR}/xc32-bin2hex ${DISTDIR}/Mini_Project_1.X.${IMAGE_TYPE}.${DEBUGGABLE_SUFFIX} 
 endif
 
 
