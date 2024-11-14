@@ -13,6 +13,8 @@
  */
  
 #define INIT_TOP 468 // Let x be the PER value, $100=\frac{48e6}{1024(x+1)}$
+volatile unsigned int x;
+#define IN_RANGE(n, min, max) ((x) >= (min) && (x) < (max))
 
 volatile unsigned int brightness = 234; // Initial of 50% brightness.
 volatile unsigned int decreasing_brightness = 0;
@@ -60,6 +62,34 @@ int main(int argc, char** argv) {
     NVIC_Initialize();
     
     while (1) {
+        
+        // Read Potentiometer
+        ADC_ConversionStart();
+        while(!ADC_ConversionStatusGet());
+        uint16_t adc_value = ADC_ConversionResultGet();
+        
+        /* ADC Value: {%} * 2^10
+         * 0-20%: 0-205.8
+         * 20%-40%: 205.8 - 409.6
+         * 40%-60%: 614.4
+         * 60%-80%: 819.2
+         * 80%-100%: 1024
+         
+         */
+        
+        if (IN_RANGE(adc_value, 0, 205.8)){
+            
+        } else if (IN_RANGE(adc_value, 205.8, 409.6)){
+            
+        } else if (IN_RANGE(adc_value, 409.6, 614.4)){
+            
+        } else if (IN_RANGE(adc_value, 614.4, 819.2)){
+            
+        } else if (IN_RANGE(adc_value, 819.2, 1024)){
+            
+        }
+        
+         
         // If we're in the first half of the 1s period, keep TCC enabled and use brightness
         if (read_count() < TC0_REGS->COUNT16.TC_CC[0] / 2) {
             // Re-enable TCC if it's disabled
