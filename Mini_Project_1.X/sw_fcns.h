@@ -2,7 +2,11 @@
 #define SW_FCNS_H
 
 extern volatile unsigned int brightness;
+volatile unsigned int x;
 volatile unsigned int decreasing_brightness = 0;
+
+#define IN_RANGE(n, min, max) ((x) >= (min) && (x) < (max))
+
 
 void Adjust_Brightness(void) {
     /*
@@ -27,5 +31,31 @@ void Adjust_Brightness(void) {
     TCC3_REGS->TCC_CC[1] = brightness;
     TCC3_REGS->TCC_CC[4] = brightness;
     TCC3_REGS->TCC_CC[3] = brightness;
+}
+
+void Adjust_Period_and_Direction(int adc_value){
+        
+        /* ADC Value: {%} * 2^10
+         * 0-20%: 0-205.8
+         * 20%-40%: 205.8 - 409.6
+         * 40%-60%: 614.4
+         * 60%-80%: 819.2
+         * 80%-100%: 1024
+         * To avoid floating point errors, rounded off the nearest whole number.
+         */
+        
+        if (IN_RANGE(adc_value, 0, 206)){
+            
+        } else if (IN_RANGE(adc_value, 206, 410)){
+            
+        } else if (IN_RANGE(adc_value, 410, 614)){
+            // Do Nothing
+            asm("nop");
+            
+        } else if (IN_RANGE(adc_value, 614, 819)){
+            
+        } else if (IN_RANGE(adc_value, 819, 1024)){
+            
+        }
 }
 #endif

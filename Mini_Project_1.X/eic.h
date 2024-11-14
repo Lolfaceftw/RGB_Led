@@ -10,8 +10,11 @@ void __attribute__((interrupt())) EIC_EXTINT_2_Handler(void) {
  * Thread mode, Handler mode is always privileged. Thus, secure access
  * to registers is always assumed inside the IRQ. 
  */
-   
-    
+    // Read Potentiometer
+    ADC_ConversionStart();
+    while(!ADC_ConversionStatusGet());
+    uint16_t adc_value = ADC_ConversionResultGet();
+
     // Switch 1
     if (EIC_SEC_REGS->EIC_INTFLAG |= (1 << 0)){
          EIC_SEC_REGS->EIC_INTFLAG |= (1 << 0);                      // Clears the interrupt flag to re-enable interrupt generation
@@ -20,7 +23,7 @@ void __attribute__((interrupt())) EIC_EXTINT_2_Handler(void) {
     
     // Switch 2
     else if (EIC_SEC_REGS->EIC_INTFLAG |= (1 << 1)){
-        
+        Adjust_Period_and_Direction(adc_value);
     }
 }
  

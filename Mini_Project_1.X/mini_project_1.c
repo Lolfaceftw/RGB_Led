@@ -8,11 +8,10 @@
 #include "clk.h"
 #include "adc.h"
 
-volatile unsigned int x;
+
 volatile unsigned int brightness = 234; // Initial of 50% brightness.
 
 #define INIT_TOP 468 // Let x be the PER value, $100 Hz=\frac{48e6}{1024(x+1)}$
-#define IN_RANGE(n, min, max) ((x) >= (min) && (x) < (max))
 
 volatile int read_count(){
     // Allow read access of COUNT register
@@ -27,34 +26,8 @@ int main(int argc, char** argv) {
     while (1) {
         // Do nothing when SW1 or SW2 is not pressed.
         while((EIC_SEC_REGS->EIC_INTFLAG |= (0 << 0)) | (EIC_SEC_REGS->EIC_INTFLAG |= (0 << 1)));
-        
-        // Read Potentiometer
-        ADC_ConversionStart();
-        while(!ADC_ConversionStatusGet());
-        uint16_t adc_value = ADC_ConversionResultGet();
-        
-        /* ADC Value: {%} * 2^10
-         * 0-20%: 0-205.8
-         * 20%-40%: 205.8 - 409.6
-         * 40%-60%: 614.4
-         * 60%-80%: 819.2
-         * 80%-100%: 1024
-         * To avoid floating point errors, rounded off the nearest whole number.
-         */
-        
-        if (IN_RANGE(adc_value, 0, 206)){
-            
-        } else if (IN_RANGE(adc_value, 206, 410)){
-            
-        } else if (IN_RANGE(adc_value, 410, 614)){
-            // Do Nothing
-            asm("nop");
-            
-        } else if (IN_RANGE(adc_value, 614, 819)){
-            
-        } else if (IN_RANGE(adc_value, 819, 1024)){
-            
-        }
+
+
         
         /*
         // If we're in the first half of the 1s period, keep TCC enabled and use brightness
