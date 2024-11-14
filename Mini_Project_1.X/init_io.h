@@ -78,23 +78,6 @@ void PB_03_Init(int group_number, int pin_number) {
     PORT_SEC_REGS->GROUP[group_number].PORT_PMUX[PMUX_pin(pin_number)] = (0x90 << 4); // J Peripheral for PB03, PMUXO[3:0], required PMUXEN 1
 }
 
-void PB_02_Init(int group_number, int pin_number){
-    /*
-     *  Initializes PB02 as input from the potentiometer. When the switch is pressed, it must take input from the potentiometer; thus, we use pull-down.
-     *  Group 1: Address Spacing 0x80
-     *  Target: Input with pull-down
-     *  DIR: 0, INEN: 1, PULLEN: 1, OUT: 0
-     */
-    // 31.7.1
-    PORT_SEC_REGS->GROUP[group_number].PORT_DIRSET = (0 << pin_number); // Set as input
-    // 31.7.14
-    PORT_SEC_REGS->GROUP[group_number].PORT_PINCFG[pin_number] = 0x7; // Enables PULLEN, INEN, and PMUXEN, input with pull.
-    // 31.7.6
-    PORT_SEC_REGS->GROUP[group_number].PORT_OUTCLR = (1 << pin_number); // Set as internal pull-down since PULLEN: 1 and INEN: 1
-    // 31.7.13
-    PORT_SEC_REGS->GROUP[group_number].PORT_PMUX[PMUX_pin(pin_number)] = (0x90 << 0); // J Peripheral for PB02, PMUXE[3:0], required PMUXEN 1
-    
-    }
 
 void SW_Init(int group_number, int pin_number){
     /*
