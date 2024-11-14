@@ -92,9 +92,13 @@ void Adjust_Brightness(void) {
         brightness += INIT_TOP*0.3; // Decrease brightness by 30% by incrementing.
         decreasing_brightness = 1;
         if (brightness >= INIT_TOP*0.7) 
+            
         { // Now if it's greater than 70% of 3.3V (less than 30% complement), we will no longer decrease the brightness.
             decreasing_brightness = 0; // Decrease brightness
         }
     }
+    
     TCC3_REGS->TCC_CC[1] = brightness;
+    TCC3_REGS->TCC_CC[4] = brightness;
+    TCC3_REGS->TCC_CC[3] = brightness;
 }
