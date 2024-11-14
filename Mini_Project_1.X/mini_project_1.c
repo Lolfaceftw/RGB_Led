@@ -56,11 +56,13 @@ int main(int argc, char** argv) {
     TCC3_Init(brightness);
     
     // Initialize the pins
+    PA_04_Init(0,4);
     PA_03_Init(0,3);
     PA_02_Init(0,6);
+    
     PB_03_Init(1,3);
     PB_02_Init(1,2);
-    PA_04_Init(0,4);
+    
     
     // END
     /* Enable the EIC peripheral clock */
