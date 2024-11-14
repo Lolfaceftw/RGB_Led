@@ -6,6 +6,7 @@
 #include "eic.h"
 #include "init_io.h"
 #include "clk.h"
+#include "adc.h"
 
 /*
  * Initialization
@@ -48,15 +49,21 @@ int main(int argc, char** argv) {
     // Initialize the Clocks
     GCLK_Init();
     Clock_Source();
+    ADC_Initialize();
+    ADC_Enable();
     
     // Initialize TCC3
     TCC3_Init(brightness);
     
     // Initialize the pins
+    PA_04_Init(0,4);
     PA_03_Init(0,3);
     PA_02_Init(0,6);
+    
     PB_03_Init(1,3);
     PB_02_Init(1,2);
+    
+    
     // END
     /* Enable the EIC peripheral clock */
     MCLK_REGS->MCLK_APBAMASK |= MCLK_APBAMASK_EIC_Msk;

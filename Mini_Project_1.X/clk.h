@@ -69,5 +69,9 @@ void Clock_Source(void){
     //while(GCLK_REGS->GCLK_SYNCBUSY & ~(1<<2));
     while(GCLK_REGS->GCLK_SYNCBUSY & (1<<2))
         asm("nop");
+    
+    // ADC Bus Clock: Generic Clock Generator Value | Channel Enable
+    GCLK_REGS -> GCLK_PCHCTRL[28] = (0 << 0) | (1 << 6);
+    while((GCLK_REGS -> GCLK_PCHCTRL[28] & (1 << 6)) != (1 << 6));
 }
 #endif
