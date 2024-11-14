@@ -3,6 +3,10 @@
 
 #include "pin_calculation.h"
 
+void PB_02_Init(int group_number, int pin_number){
+    PORT_SEC_REGS -> GROUP[group_number].PORT_PINCFG[pin_number] = 0x1U;
+    PORT_SEC_REGS -> GROUP[group_number].PORT_PINCFG[pin_number] = 0x1U;
+}
 void PA_03_Init(int group_number, int pin_number) {    
     /*
      *  Initializes PA03 acting as the R channel, active-HI.
