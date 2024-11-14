@@ -8,16 +8,12 @@
 #include "clk.h"
 #include "adc.h"
 
-/*
- * Initialization
- */
- 
-#define INIT_TOP 468 // Let x be the PER value, $100=\frac{48e6}{1024(x+1)}$
 volatile unsigned int x;
-#define IN_RANGE(n, min, max) ((x) >= (min) && (x) < (max))
-
 volatile unsigned int brightness = 234; // Initial of 50% brightness.
 volatile unsigned int decreasing_brightness = 0;
+
+#define INIT_TOP 468 // Let x be the PER value, $100 Hz=\frac{48e6}{1024(x+1)}$
+#define IN_RANGE(n, min, max) ((x) >= (min) && (x) < (max))
 
 volatile int read_count(){
     // Allow read access of COUNT register
@@ -28,39 +24,7 @@ volatile int read_count(){
 }
  
 int main(int argc, char** argv) {
-    // Initialize the Clocks
-    GCLK_Init();
-    Clock_Source();
-    ADC_Initialize();
-    ADC_Enable();
-    
-    // Initialize TCC3
-    TCC3_Init(brightness);
-    
-    // Initialize the pins
-    PA_04_Init(0,4);
-    PA_03_Init(0,3);
-    PA_02_Init(0,6);
-    
-    PB_03_Init(1,3);
-    PB_02_Init(1,2);
-    
-    
-    // END
-    /* Enable the EIC peripheral clock */
-    MCLK_REGS->MCLK_APBAMASK |= MCLK_APBAMASK_EIC_Msk;
-     // Enable the TC0 Bus Clock
-    GCLK_REGS -> GCLK_PCHCTRL[23] = (1 << 6); // Bit 6 Enable
-    while ((GCLK_REGS -> GCLK_PCHCTRL [23] * (1 << 6)) == 0);
-    
-    TC0_Init();
-    
-    /* To enable the filter and debouncer in EIC, the GCLK_EIC should be enabled */
-    GCLK_REGS->GCLK_PCHCTRL[4] = 0x00000040;
-    
-    EIC_Initialize();
-    NVIC_Initialize();
-    
+    Start(brightness);
     while (1) {
         
         // Read Potentiometer
@@ -74,22 +38,24 @@ int main(int argc, char** argv) {
          * 40%-60%: 614.4
          * 60%-80%: 819.2
          * 80%-100%: 1024
-         
+         * To avoid floating point errors, rounded off the nearest whole number.
          */
         
-        if (IN_RANGE(adc_value, 0, 205.8)){
+        if (IN_RANGE(adc_value, 0, 206)){
             
-        } else if (IN_RANGE(adc_value, 205.8, 409.6)){
+        } else if (IN_RANGE(adc_value, 206, 410)){
             
-        } else if (IN_RANGE(adc_value, 409.6, 614.4)){
+        } else if (IN_RANGE(adc_value, 410, 614)){
+            // Do Nothing
+            asm("nop");
             
-        } else if (IN_RANGE(adc_value, 614.4, 819.2)){
+        } else if (IN_RANGE(adc_value, 614, 819)){
             
-        } else if (IN_RANGE(adc_value, 819.2, 1024)){
+        } else if (IN_RANGE(adc_value, 819, 1024)){
             
         }
         
-         
+        /*
         // If we're in the first half of the 1s period, keep TCC enabled and use brightness
         if (read_count() < TC0_REGS->COUNT16.TC_CC[0] / 2) {
             // Re-enable TCC if it's disabled
@@ -106,7 +72,7 @@ int main(int argc, char** argv) {
                 TCC3_REGS->TCC_CTRLA &= ~(1 << 1);  // Disable TCC
                 while (TCC3_REGS->TCC_SYNCBUSY & (1 << 1));  // Wait for synchronization
             }
-        }
+        }  */
 }
         
     return (EXIT_SUCCESS);
