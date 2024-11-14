@@ -71,7 +71,7 @@ void NVIC_Initialize( void )
     NVIC_SetPriority(EIC_EXTINT_0_IRQn, 3);                     // Set priority for EXTINT0 to 3
     NVIC_EnableIRQ(EIC_EXTINT_0_IRQn);                          // Enables EXTINT0
     
-        NVIC_SetPriority(EIC_EXTINT_1_IRQn, 4);                     // Set priority for EXTINT1 to 4
+    NVIC_SetPriority(EIC_EXTINT_1_IRQn, 4);                     // Set priority for EXTINT1 to 4
     NVIC_EnableIRQ(EIC_EXTINT_1_IRQn);                          // Enables EXTINT1
 }
 
