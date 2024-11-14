@@ -4,8 +4,25 @@
 #include "pin_calculation.h"
 
 void PB_02_Init(int group_number, int pin_number){
-    PORT_SEC_REGS -> GROUP[group_number].PORT_PINCFG[pin_number] = 0x1U;
-    PORT_SEC_REGS -> GROUP[group_number].PORT_PINCFG[pin_number] = 0x1U;
+     /*
+     *  Initializes PB02 acting as the potentiometer input.
+     * 
+     *  Group 1: Address Spacing 0x80
+     *  Target: PMUX Enabled; ADC Selected
+     */
+    PORT_SEC_REGS -> GROUP[group_number].PORT_PINCFG[pin_number] = 0x1U; // PMUX EN
+    PORT_SEC_REGS -> GROUP[group_number].PORT_PMUX[pin_number] = 0x1U; // Peripheral B
+}
+
+void PA_04_Init(int group_number, int pin_number){
+       /*
+     *  Initializes PB02 acting as the potentiometer input.
+     * 
+     *  Group 1: Address Spacing 0x80
+     *  Target: PMUX Enabled; ADC Selected
+     */
+    PORT_SEC_REGS -> GROUP[pin_number].PORT_PINCFG[pin_number] = 0x1U; // PMUX EN
+    PORT_SEC_REGS -> GROUP[pin_number].PORT_PMUX[pin_number] = 0x1U; // Peripheral B
 }
 void PA_03_Init(int group_number, int pin_number) {    
     /*
