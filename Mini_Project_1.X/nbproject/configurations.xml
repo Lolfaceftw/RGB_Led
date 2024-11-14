@@ -18,6 +18,10 @@
                    displayName="Source Files"
                    projectFiles="true">
       <itemPath>mini_project_1.c</itemPath>
+      <itemPath>pin_calculation.h</itemPath>
+      <itemPath>eic.h</itemPath>
+      <itemPath>init_io.h</itemPath>
+      <itemPath>clk.h</itemPath>
     </logicalFolder>
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>
