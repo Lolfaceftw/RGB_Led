@@ -31,11 +31,9 @@ void Start(void){
     
     /* Enable the EIC peripheral clock */
     MCLK_REGS->MCLK_APBAMASK |= MCLK_APBAMASK_EIC_Msk;
-     // Enable the TC0 Bus Clock
+
     GCLK_REGS -> GCLK_PCHCTRL[23] = (1 << 6); // Bit 6 Enable
     while ((GCLK_REGS -> GCLK_PCHCTRL [23] * (1 << 6)) == 0);
-    
-    TC0_Init();
     
     /* To enable the filter and debouncer in EIC, the GCLK_EIC should be enabled */
     GCLK_REGS->GCLK_PCHCTRL[4] = 0x00000040;
