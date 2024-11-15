@@ -7,6 +7,21 @@ volatile unsigned int decreasing_brightness = 0;
 
 #define IN_RANGE(n, min, max) ((x) >= (min) && (x) < (max))
 
+/*
+0: 7a1fce -> R : 122, G : 31, B : 206
+3: e57c16 -> R : 229, G : 124, B : 22
+1: 4fe516 -> R : 79, G : 229, B : 22
+2: 16dde5 -> R : 22, G : 221, B : 229
+6: 10e96e -> R : 16, G : 233, B : 110
+*/
+
+int colors[3][5] = {
+    {122, 31, 206},
+    {229, 124 ,22},
+    {79, 229, 22},
+    {22, 221, 229},
+    {16, 233, 110},
+};
 
 void Adjust_Brightness(void) {
     /*

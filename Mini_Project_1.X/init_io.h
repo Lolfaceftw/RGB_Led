@@ -78,7 +78,7 @@ void PA_02_Init(int group_number, int pin_number) {
      * 
      *  Group 0: Address Spacing 0x00
      *  Target: Output; input enabled.
-     *  DIR: 1, INEN: 1, PULLEN: X, OUT: X[
+     *  DIR: 1, INEN: 1, PULLEN: X, OUT: X
      */
     // 31.7.1
     PORT_SEC_REGS->GROUP[group_number].PORT_DIRSET = (1 << pin_number); // Set as output
