@@ -25,7 +25,7 @@ int main(int argc, char** argv) {
     Start();
     while (1) {
         // Do nothing when SW1 or SW2 is not pressed.
-        while((EIC_SEC_REGS->EIC_INTFLAG |= (0 << 0)) | (EIC_SEC_REGS->EIC_INTFLAG |= (0 << 1)));
+        // while((EIC_SEC_REGS->EIC_INTFLAG |= (0 << 0)) | (EIC_SEC_REGS->EIC_INTFLAG |= (0 << 1)));
 
 
         
