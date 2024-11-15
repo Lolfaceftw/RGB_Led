@@ -23,6 +23,16 @@ int colors[3][5] = {
     {16, 233, 110},
 };
 
+int i;
+
+void Cycle_RGB(void){
+    for (i = 0; i < 5; i++){
+        TCC3_REGS->TCC_CC[1] = colors[i][0];
+        TCC3_REGS->TCC_CC[4] = colors[i][1];
+        TCC3_REGS->TCC_CC[3] = colors[i][2];
+    }
+}
+
 void Adjust_Brightness(void) {
     /*
      *  This is the main interrupt function for adjusting the brightness.

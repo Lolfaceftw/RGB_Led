@@ -7,6 +7,7 @@
 #include "init_io.h"
 #include "clk.h"
 #include "adc.h"
+#include "sw_fcns.h"
 
 
 volatile unsigned int brightness = 234; // Initial of 50% brightness.
@@ -24,6 +25,7 @@ volatile int read_count(){
 int main(int argc, char** argv) {
     Start();
     while (1) {
+        Cycle_RGB();
         // Do nothing when SW1 or SW2 is not pressed.
         // while((EIC_SEC_REGS->EIC_INTFLAG |= (0 << 0)) | (EIC_SEC_REGS->EIC_INTFLAG |= (0 << 1)));
 
