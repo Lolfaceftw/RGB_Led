@@ -32,14 +32,15 @@ void TCC3_Init(int brightness) {
      */
     
     /* Set the duty cycle or brightness @ default 50% */
-    // PA03
+    // PA03 WO[1]
     TCC3_REGS->TCC_CC[1] = brightness;
     
-    // PA06
+    // PA06 WO[4]
     TCC3_REGS->TCC_CC[4] = brightness;
     
-    // PB03
+    // PB03 WO[3]
     TCC3_REGS->TCC_CC[3] = brightness;  
+    
     /* TCC enable */
     TCC3_REGS->TCC_CTRLA |= (1 << 1); // Enables TCC
     while(TCC3_REGS->TCC_SYNCBUSY & ~(1<<1)); // Wait for synchronization
