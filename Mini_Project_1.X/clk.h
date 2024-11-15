@@ -6,8 +6,8 @@
 void GCLK_Init(void){
     /* Initialize Clocks */
     // Main Clock enabled by default
-    GCLK_REGS -> GCLK_PCHCTRL[25] = 0x00000040;
-    while ((GCLK_REGS -> GCLK_PCHCTRL [25] & 0x00000040) == 0) ; // Wait for synchronization
+    GCLK_REGS -> GCLK_PCHCTRL[27] = 0x00000040;
+    while ((GCLK_REGS -> GCLK_PCHCTRL [27] & 0x00000040) == 0) ; // Wait for synchronization
     }
  
 void TCC3_Init(int brightness) {
