@@ -1,6 +1,12 @@
 #ifndef ADC_H
 #define ADC_H
 
+void ADC_Initialize(void);
+void ADC_Enable(void);
+void ADC_ConversionStart(void);
+bool ADC_ConversionStatusGet(Void);
+void delay_ms(int delay);
+
 void ADC_Initialize(void){
     /* Reset ADC */
     ADC_REGS -> ADC_CTRLA = (1 <<0);
@@ -36,7 +42,7 @@ void ADC_ConversionStart(void) {
 // Read Conversion Result
 uint16_t ADC_ConversionResultGet ( void )
 {
-return ( uint16_t ) ADC_REGS -> ADC_RESULT ;
+return (uint16_t) ADC_REGS -> ADC_RESULT ;
 }
 
 /* Check whether result is ready */

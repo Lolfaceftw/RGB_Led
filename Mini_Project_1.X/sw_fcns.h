@@ -1,11 +1,12 @@
 #ifndef SW_FCNS_H
 #define SW_FCNS_H
-
+#include "adc.h"
 extern volatile unsigned int brightness;
 volatile unsigned int x;
 volatile unsigned int decreasing_brightness = 0;
 
 #define IN_RANGE(n, min, max) ((x) >= (min) && (x) < (max))
+#define INIT_TOP 468 // Let x be the PER value, $100 Hz=\frac{48e6}{1024(x+1)}$
 
 /*
 0: 7a1fce -> R : 122, G : 31, B : 206
@@ -14,6 +15,7 @@ volatile unsigned int decreasing_brightness = 0;
 2: 16dde5 -> R : 22, G : 221, B : 229
 6: 10e96e -> R : 16, G : 233, B : 110
 */
+uint16_t RGB_to_CC(uint8_t x);
 
 int colors[3][5] = {
     {122, 31, 206},
@@ -26,11 +28,27 @@ int colors[3][5] = {
 int i;
 
 void Cycle_RGB(void){
-    for (i = 0; i < 5; i++){
-        TCC3_REGS->TCC_CC[1] = colors[i][0];
-        TCC3_REGS->TCC_CC[4] = colors[i][1];
-        TCC3_REGS->TCC_CC[3] = colors[i][2];
-    }
+    
+    TCC3_REGS->TCC_CC[1] = RGB_to_CC(122);
+    TCC3_REGS->TCC_CC[0] = RGB_to_CC(31);
+    TCC3_REGS->TCC_CC[3] = RGB_to_CC(206);
+    delay_ms(400);
+    TCC3_REGS->TCC_CC[1] = RGB_to_CC(229);
+    TCC3_REGS->TCC_CC[0] = RGB_to_CC(124);
+    TCC3_REGS->TCC_CC[3] = RGB_to_CC(22);
+    delay_ms(400);
+    TCC3_REGS->TCC_CC[1] = RGB_to_CC(79);
+    TCC3_REGS->TCC_CC[0] = RGB_to_CC(229);
+    TCC3_REGS->TCC_CC[3] = RGB_to_CC(22);
+    delay_ms(400);
+    TCC3_REGS->TCC_CC[1] = RGB_to_CC(22);
+    TCC3_REGS->TCC_CC[0] = RGB_to_CC(221);
+    TCC3_REGS->TCC_CC[3] = RGB_to_CC(229);
+    delay_ms(400);
+    TCC3_REGS->TCC_CC[1] = RGB_to_CC(16);
+    TCC3_REGS->TCC_CC[0] = RGB_to_CC(233);
+    TCC3_REGS->TCC_CC[3] = RGB_to_CC(110);
+    delay_ms(400);
 }
 
 void Adjust_Brightness(void) {
@@ -82,5 +100,9 @@ void Adjust_Period_and_Direction(int adc_value){
         } else if (IN_RANGE(adc_value, 819, 1024)){
             
         }
+}
+
+uint16_t RGB_to_CC(uint8_t x){
+    return (uint16_t)(INIT_TOP * (1.0f - (float)x / 255.0f));
 }
 #endif

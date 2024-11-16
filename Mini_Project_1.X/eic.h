@@ -3,6 +3,11 @@
 
 #include "init_io.h"
 #include "sw_fcns.h"
+#include "adc.h"
+
+void __attribute__((interrupt())) EIC_EXTINT_2_Handler(void);
+void EIC_Initialize(void);
+void NVIC_Initialize(void);
 
 void __attribute__((interrupt())) EIC_EXTINT_2_Handler(void) {
     /*
