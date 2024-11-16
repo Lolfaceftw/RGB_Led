@@ -6,6 +6,7 @@ extern volatile unsigned int brightness;
 volatile unsigned int x;
 volatile unsigned int decreasing_brightness = 0;
 extern float multiplier;
+extern int delay;
 
 #define IN_RANGE(n, min, max) ((x) >= (min) && (x) < (max))
 #define INIT_TOP 468 // Let x be the PER value, $100 Hz=\frac{48e6}{1024(x+1)}$
@@ -44,7 +45,7 @@ void test(void){
     multiplier = 0.05f;
 }
 
-void Adjust_Brightness(void) {
+void Adjust_Brightness(uint16_t adc_value) {
     /*
      *  This is the main interrupt function for adjusting the brightness.
      *  Initial brightness is set at 50%. 

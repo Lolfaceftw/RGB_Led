@@ -12,7 +12,7 @@
 
 void Start(void);
 //volatile unsigned int brightness = 234; // Initial of 50% brightness.
-float multiplier = 0.1f;
+float multiplier = 0.5f;
 int delay = 400;
 
 int main(int argc, char** argv) {
