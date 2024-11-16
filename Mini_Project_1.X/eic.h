@@ -28,11 +28,6 @@ void __attribute__((interrupt())) EIC_EXTINT_2_Handler(void) {
 }
  
 void EIC_Initialize(void){
-    
-    /* Initializes SW1 and SW2  as an input */
-    SW_Init(0, 0); // SW1
-    SW_Init(0, 1); // SW2
-    
     /* Reset and wait for the operation to finish */
     EIC_SEC_REGS->EIC_CTRLA = 0x01;                             // Set SWRST bit to 1 to reset
     while((EIC_SEC_REGS->EIC_SYNCBUSY & 0x01) == 0x01);
