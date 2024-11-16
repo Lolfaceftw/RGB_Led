@@ -8,8 +8,6 @@ void PB_03_Init(void);
 void SW_1_Init(void);
 void SW_2_Init(void);
 
-extern volatile unsigned int brightness;
-
 void PB_02_Init(void){
      /*
      *  Initializes PB02 acting as the potentiometer input.
@@ -84,7 +82,7 @@ void SW_1_Init(void){
      *  DIR: 0, INEN: 1, PULLEN: 1, OUT: 1
      */
     // 31.7.1
-    PORT_SEC_REGS->GROUP[0].PORT_DIRSET |= (0 << 0); // Set as input.
+    PORT_SEC_REGS->GROUP[0].PORT_DIRCLR |= (1 << 0); // Set as input.
     // 31.7.14
     PORT_SEC_REGS->GROUP[0].PORT_PINCFG[0] |= 0x7; // Enables PULLEN, INEN, and PMUXEN, input with pull.
     // 31.7.6
@@ -101,7 +99,7 @@ void SW_2_Init(void){
      *  DIR: 0, INEN: 1, PULLEN: 1, OUT: 1
      */
     // 31.7.1
-    PORT_SEC_REGS->GROUP[0].PORT_DIRSET |= (0 << 1); // Set as input.
+    PORT_SEC_REGS->GROUP[0].PORT_DIRCLR |= (1 << 1); // Set as input.
     // 31.7.14
     PORT_SEC_REGS->GROUP[0].PORT_PINCFG[1] |= 0x7; // Enables PULLEN, INEN, and PMUXEN, input with pull.
     // 31.7.6

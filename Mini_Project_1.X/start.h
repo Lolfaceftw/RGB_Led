@@ -18,9 +18,10 @@ void Start(void){
      */
     
     Clocks_Init();
+    
     IO_Init();
-    SW_Init();
     EIC_Start();
+    
 }
 
 void Clocks_Init(void){
