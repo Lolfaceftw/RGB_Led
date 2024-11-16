@@ -15,10 +15,8 @@ void NVIC_Initialize(void);
 
 void __attribute__((interrupt())) EIC_EXTINT_0_Handler(void) {
     /*
- * During IRQ execution, the core is in Handler mode. Compared to
- * Thread mode, Handler mode is always privileged. Thus, secure access
- * to registers is always assumed inside the IRQ. 
- */
+     * Handler for SW1 or PA00
+     */
     EIC_SEC_REGS->EIC_INTFLAG |= (1 << 0);
     
     ADC_ConversionStart();
@@ -30,19 +28,14 @@ void __attribute__((interrupt())) EIC_EXTINT_0_Handler(void) {
     }
 void __attribute__((interrupt())) EIC_EXTINT_1_Handler(void) {
     /*
- * During IRQ execution, the core is in Handler mode. Compared to
- * Thread mode, Handler mode is always privileged. Thus, secure access
- * to registers is always assumed inside the IRQ. 
- */
-        //Adjust_Brightness();}
+     * Handler for Sw2 or PA01
+     */
     EIC_SEC_REGS->EIC_INTFLAG |= (1 << 1);
-    //multiplier = 0.0f;
+    
     ADC_ConversionStart();
     while(!ADC_ConversionStatusGet());
     uint16_t adc_value = ADC_ConversionResultGet();
-
-
-                       
+   
     Adjust_Period_and_Direction(adc_value);
     EIC_SEC_REGS->EIC_INTFLAG |= (1 << 1);
 }

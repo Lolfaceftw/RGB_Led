@@ -11,7 +11,6 @@
 #include "start.h"
 
 void Start(void);
-//volatile unsigned int brightness = 234; // Initial of 50% brightness.
 float multiplier = 0.5f;
 int delay = 400;
 int normal = 1;

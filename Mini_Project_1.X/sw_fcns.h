@@ -22,6 +22,8 @@ extern int normal;
 uint16_t RGB_to_CC(uint8_t x);
 int direction = 1; 
 int freeze = 0;
+int i;
+int j;
 int colors[5][3] = {
     {122, 31, 206},
     {229, 124 ,22},
@@ -30,63 +32,63 @@ int colors[5][3] = {
     {16, 233, 110},
 };
 
-int i;
+
 
 void Cycle_RGB(float mult, int delay, int normal){
+    /*
+     * 
+     * @param mult: the main multiplier for the colors to adjust the brightness.
+     * @param delay: a cheap way to adjust the period per color than using a clock.
+     * @param normal: see if the direction should be normal or reversed. 1 is normal and 0 is reversed.
+     */
     if (freeze == 0){
-    if (normal == 1){
-    for (i = 0; i <= 4; i++){
-    
-    TCC3_REGS->TCC_CC[1] = RGB_to_CC(mult*colors[i][0]);
-    TCC3_REGS->TCC_CC[0] = RGB_to_CC(mult*colors[i][1]);
-    TCC3_REGS->TCC_CC[3] = RGB_to_CC(mult*colors[i][2]);
-    delay_ms(delay);
-    }} else if (normal == 0){
-    for (i = 4; i >= 0; i--){
-    
-    TCC3_REGS->TCC_CC[1] = RGB_to_CC(mult*colors[i][0]);
-    TCC3_REGS->TCC_CC[0] = RGB_to_CC(mult*colors[i][1]);
-    TCC3_REGS->TCC_CC[3] = RGB_to_CC(mult*colors[i][2]);
-    delay_ms(delay);
-    }}}
-    
-}
-void test(void){
-    delay_ms(1000);
-    multiplier = 0.05f;
+        if (normal == 1){
+        for (i = 0; i <= 4; i++){
+
+        TCC3_REGS->TCC_CC[1] = RGB_to_CC(mult*colors[i][0]);
+        TCC3_REGS->TCC_CC[0] = RGB_to_CC(mult*colors[i][1]);
+        TCC3_REGS->TCC_CC[3] = RGB_to_CC(mult*colors[i][2]);
+        j = i;
+        delay_ms(delay);
+        }
+    } else if (normal == 0){
+        for (i = 4; i >= 0; i--){
+
+        TCC3_REGS->TCC_CC[1] = RGB_to_CC(mult*colors[i][0]);
+        TCC3_REGS->TCC_CC[0] = RGB_to_CC(mult*colors[i][1]);
+        TCC3_REGS->TCC_CC[3] = RGB_to_CC(mult*colors[i][2]);
+        j = i;
+        delay_ms(delay);
+            }
+        }
+    }
 }
 
 void Adjust_Brightness(uint16_t adc_value) {
-    
+    /**
+     * A simple function that overwrites the global variable multipli depending on the adc_value.
+     * Since it is 10 bits, we want the multiplier to be 1 when ADC value is 0 (full clockwise) and vice versa.
+     * @param adc_value: the adc value from the potentiometer reading.
+     */
     multiplier = 1 - (adc_value / 1028.0f);
-    
-    /*
-    if (direction == 1){
-        multiplier += 0.2f;
-        if (multiplier >= 0.9f) {
-            multiplier = 0.9f;
-            direction = -1;
-        }
-    } else if (direction == -1){
-        multiplier -= 0.3f;
-        if (multiplier <= 0.3f){
-            multiplier = 0.3f;
-            direction = 1;
-        }
-    }*/
+    if (freeze == 1){
+        TCC3_REGS->TCC_CC[1] = RGB_to_CC(multiplier*colors[j][0]);
+        TCC3_REGS->TCC_CC[0] = RGB_to_CC(multiplier*colors[j][1]);
+        TCC3_REGS->TCC_CC[3] = RGB_to_CC(multiplier*colors[j][2]);
+    }
 }
 
 void Adjust_Period_and_Direction(uint16_t adc_value){
-        
-        /* ADC Value: {%} * 2^10
+        /* The function that adjusts the period per color and the direction.
+         * ADC Value: {%} * 2^10
          * 0-20%: 0-205.8
          * 20%-40%: 205.8 - 409.6
          * 40%-60%: 614.4
          * 60%-80%: 819.2
          * 80%-100%: 1024
          * To avoid floating point errors, rounded off the nearest whole number.
+         * @param adc_value: from the potentiometer input.
          */
-    //multiplier = 0.0f;
         if (IN_RANGE(adc_value, 0, 206)){
             normal = 1;
             delay = 400;
@@ -96,8 +98,6 @@ void Adjust_Period_and_Direction(uint16_t adc_value){
             delay = 800;
             freeze = 0;
         } else if (IN_RANGE(adc_value, 410, 614)){
-            // Do Nothing
-            asm("nop");
             freeze = 1;
         } else if (IN_RANGE(adc_value, 614, 819)){
             normal = 0;
@@ -111,6 +111,11 @@ void Adjust_Period_and_Direction(uint16_t adc_value){
 }
 
 uint16_t RGB_to_CC(uint8_t x){
+    /**
+     * An RGB to CC converter so I don't have to manually calculate converting from RGB to CC.
+     * @param x: Either R, G, or B.
+     * @return: Appropriate CC PER value..
+     */
     return (uint16_t)(INIT_TOP * (1.0f - (float)x / 255.0f));
 }
 #endif

@@ -24,24 +24,7 @@ void TCC3_Init(void) {
     
     /* Configure duty cycle values */    
     TCC3_REGS->TCC_PER = INIT_TOP; // Set the period value
-    
-    /*
-     * PA03 - TCC3/WO[1]
-     * PA06 - TCC3/WO[4]
-     * PB03 - TCC3/WO[3]
-     */
-    
-    /* Set the duty cycle or brightness @ default 50% */
-    /*
-    // PA03 WO[1]
-    TCC3_REGS->TCC_CC[1] = RGB_to_CC(255);
-    
-    // PA06 WO[4]
-    TCC3_REGS->TCC_CC[0] = RGB_to_CC(255);
-    
-    // PB03 WO[3]
-    TCC3_REGS->TCC_CC[3] = RGB_to_CC(255);  
-    */
+
     /* TCC enable */
     TCC3_REGS->TCC_CTRLA |= (1 << 1); // Enables TCC
     while(TCC3_REGS->TCC_SYNCBUSY & ~(1<<1)); // Wait for synchronization
