@@ -14,8 +14,11 @@ void PB_02_Init(void){
      * 
      *  Group 1: Address Spacing 0x80
      *  Target: PMUX Enabled; ADC Selected
+      * DIR: 0, INEN: 1, PULLEN: 1, OUT: 1
      */
-    PORT_SEC_REGS -> GROUP[1].PORT_PINCFG[2] |= 0x1; // PMUX EN
+    PORT_SEC_REGS -> GROUP[1].PORT_DIRCLR|= (1 << 2); // Clear DIR for Input
+    PORT_SEC_REGS -> GROUP[1].PORT_OUTSET |= (1 << 2); 
+    PORT_SEC_REGS -> GROUP[1].PORT_PINCFG[2] |= (0x3 << 0); // PMUX EN and InEN 1
     PORT_SEC_REGS -> GROUP[1].PORT_PMUX[1] |= (0x1 << 0); // Peripheral B
 }
 

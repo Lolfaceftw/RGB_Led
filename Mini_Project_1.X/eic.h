@@ -34,16 +34,18 @@ void __attribute__((interrupt())) EIC_EXTINT_1_Handler(void) {
  * Thread mode, Handler mode is always privileged. Thus, secure access
  * to registers is always assumed inside the IRQ. 
  */
-    
-}
-    //Adjust_Brightness();}
-    
+        //Adjust_Brightness();}
+    EIC_SEC_REGS->EIC_INTFLAG |= (1 << 1);
+    //multiplier = 0.0f;
+    ADC_ConversionStart();
+    while(!ADC_ConversionStatusGet());
+    uint16_t adc_value = ADC_ConversionResultGet();
 
 
                        
-    //Adjust_Period_and_Direction(adc_value);
-    
-
+    Adjust_Period_and_Direction(adc_value);
+    EIC_SEC_REGS->EIC_INTFLAG |= (1 << 1);
+}
 
 
 void EIC_Initialize(void){

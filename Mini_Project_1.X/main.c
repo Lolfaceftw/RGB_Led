@@ -14,14 +14,15 @@ void Start(void);
 //volatile unsigned int brightness = 234; // Initial of 50% brightness.
 float multiplier = 0.5f;
 int delay = 400;
+int normal = 1;
 
 int main(int argc, char** argv) {
 
     Start();
     while (1) {
-        Cycle_RGB(multiplier, delay);
+        Cycle_RGB(multiplier, delay, normal);
 }
-        
+       
     return (EXIT_SUCCESS);
 }
 
