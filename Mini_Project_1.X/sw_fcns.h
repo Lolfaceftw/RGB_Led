@@ -41,15 +41,19 @@ void Cycle_RGB(float mult, int delay, int normal){
      * @param delay: a cheap way to adjust the period per color than using a clock.
      * @param normal: see if the direction should be normal or reversed. 1 is normal and 0 is reversed.
      */
-    if (freeze == 0){
+   // if (freeze == 0){
+   
         if (normal == 1){
         for (i = 0; i <= 4; i++){
-
+        
         TCC3_REGS->TCC_CC[1] = RGB_to_CC(mult*colors[i][0]);
         TCC3_REGS->TCC_CC[0] = RGB_to_CC(mult*colors[i][1]);
         TCC3_REGS->TCC_CC[3] = RGB_to_CC(mult*colors[i][2]);
         j = i;
         delay_ms(delay);
+        if (freeze == 1){
+            break;
+        }
         }
     } else if (normal == 0){
         for (i = 4; i >= 0; i--){
@@ -59,9 +63,12 @@ void Cycle_RGB(float mult, int delay, int normal){
         TCC3_REGS->TCC_CC[3] = RGB_to_CC(mult*colors[i][2]);
         j = i;
         delay_ms(delay);
+        if (freeze == 1){
+            break;
+        }
             }
         }
-    }
+    //}
 }
 
 void Adjust_Brightness(uint16_t adc_value) {
