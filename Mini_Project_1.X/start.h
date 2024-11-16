@@ -31,7 +31,7 @@ void Clocks_Init(void){
     ADC_Enable();
     
     // Initialize TCC3
-    TCC3_Init(brightness);
+    TCC3_Init();
 }
 
 void IO_Init(void){

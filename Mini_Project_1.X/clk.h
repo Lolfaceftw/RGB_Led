@@ -1,6 +1,6 @@
 #ifndef CLK_H
 #define CLK_H
-
+#include "sw_fcns.h"
 #define INIT_TOP 468 // Let x be the PER value, $100=\frac{48e6}{1024(x+1)}$
 
 void GCLK_Init(void){
@@ -10,7 +10,7 @@ void GCLK_Init(void){
     while ((GCLK_REGS -> GCLK_PCHCTRL [27] & 0x00000040) == 0) ; // Wait for synchronization
     }
  
-void TCC3_Init(int brightness) {
+void TCC3_Init(void) {
     /* Reset TCC */
     TCC3_REGS->TCC_CTRLA = 0x01; // Set SWRST bit to 1 to reset
     while(TCC3_REGS->TCC_SYNCBUSY & ~(1<<0)); // Wait for synchronization
@@ -32,15 +32,16 @@ void TCC3_Init(int brightness) {
      */
     
     /* Set the duty cycle or brightness @ default 50% */
+    /*
     // PA03 WO[1]
-    TCC3_REGS->TCC_CC[1] = 0;
+    TCC3_REGS->TCC_CC[1] = RGB_to_CC(255);
     
     // PA06 WO[4]
-    TCC3_REGS->TCC_CC[0] = 0;
+    TCC3_REGS->TCC_CC[0] = RGB_to_CC(255);
     
     // PB03 WO[3]
-    TCC3_REGS->TCC_CC[3] = 0;  
-    
+    TCC3_REGS->TCC_CC[3] = RGB_to_CC(255);  
+    */
     /* TCC enable */
     TCC3_REGS->TCC_CTRLA |= (1 << 1); // Enables TCC
     while(TCC3_REGS->TCC_SYNCBUSY & ~(1<<1)); // Wait for synchronization

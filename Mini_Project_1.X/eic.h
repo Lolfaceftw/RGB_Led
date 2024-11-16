@@ -5,33 +5,41 @@
 #include "sw_fcns.h"
 #include "adc.h"
 
-void __attribute__((interrupt())) EIC_EXTINT_2_Handler(void);
+void __attribute__((interrupt())) EIC_EXTINT_0_Handler(void);
+void __attribute__((interrupt())) EIC_EXTINT_1_Handler(void);
 void EIC_Initialize(void);
 void NVIC_Initialize(void);
 
-void __attribute__((interrupt())) EIC_EXTINT_2_Handler(void) {
+void __attribute__((interrupt())) EIC_EXTINT_0_Handler(void) {
     /*
  * During IRQ execution, the core is in Handler mode. Compared to
  * Thread mode, Handler mode is always privileged. Thus, secure access
  * to registers is always assumed inside the IRQ. 
  */
+    EIC_SEC_REGS->EIC_INTFLAG |= (1 << 0);  
+                       
+    Adjust_Brightness();
+    }
+void __attribute__((interrupt())) EIC_EXTINT_1_Handler(void) {
+    /*
+ * During IRQ execution, the core is in Handler mode. Compared to
+ * Thread mode, Handler mode is always privileged. Thus, secure access
+ * to registers is always assumed inside the IRQ. 
+ */
+    EIC_SEC_REGS->EIC_INTFLAG |= (1 << 1);  
     // Read Potentiometer
     ADC_ConversionStart();
     while(!ADC_ConversionStatusGet());
     uint16_t adc_value = ADC_ConversionResultGet();
 
-    // Switch 1
-    if (EIC_SEC_REGS->EIC_INTFLAG |= (1 << 0)){
-         EIC_SEC_REGS->EIC_INTFLAG |= (1 << 0);                      // Clears the interrupt flag to re-enable interrupt generation
-         Adjust_Brightness();
+                       
+    Adjust_Period_and_Direction(adc_value);
     }
+
+
     
-    // Switch 2
-    else if (EIC_SEC_REGS->EIC_INTFLAG |= (1 << 1)){
-        Adjust_Period_and_Direction(adc_value);
-    }
-}
- 
+    
+        
 void EIC_Initialize(void){
     /* Reset and wait for the operation to finish */
     EIC_SEC_REGS->EIC_CTRLA = 0x01;                             // Set SWRST bit to 1 to reset
