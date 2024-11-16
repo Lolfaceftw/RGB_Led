@@ -1,7 +1,6 @@
 #ifndef INIT_IO_H
 #define INIT_IO_H
 
-#include "pin_calculation.h"
 #include "adc.h"
 #include "clk.h"
 
