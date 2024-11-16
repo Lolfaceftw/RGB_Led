@@ -6,6 +6,7 @@ volatile unsigned int x;
 volatile unsigned int decreasing_brightness = 0;
 
 #define IN_RANGE(n, min, max) ((x) >= (min) && (x) < (max))
+#define INIT_TOP 468 // Let x be the PER value, $100 Hz=\frac{48e6}{1024(x+1)}$
 
 /*
 0: 7a1fce -> R : 122, G : 31, B : 206

@@ -1,50 +1,15 @@
 #ifndef INIT_IO_H
 #define INIT_IO_H
 
-#include "adc.h"
-#include "clk.h"
+void PB_02_Init(void);
+void PA_03_Init(void);
+void PA_06_Init(void);
+void PB_03_Init(void);
+void SW_1_Init(void);
+void SW_2_Init(void);
 
 extern volatile unsigned int brightness;
 
-void Start(void){
-    /*
-     * Initializes the clock, pin, ADC, and EIC.
-     * 
-     *  @return: void
-     */
-    // Initialize the Clocks
-    GCLK_Init();
-    Clock_Source();
-    ADC_Initialize();
-    ADC_Enable();
-    
-    // Initialize TCC3
-    TCC3_Init(brightness);
-    
-    // Initialize the RGB pins
-    PA_03_Init();
-    PA_06_Init();
-    PB_03_Init();
-    
-    // Initialize Potentiometer Input
-    PB_02_Init();
-    
-    // Initialize SW and SW2
-    SW_1_Init();
-    SW_2_Init();
-    
-    /* Enable the EIC peripheral clock */
-    MCLK_REGS->MCLK_APBAMASK |= MCLK_APBAMASK_EIC_Msk;
-
-    GCLK_REGS -> GCLK_PCHCTRL[23] = (1 << 6); // Bit 6 Enable
-    while ((GCLK_REGS -> GCLK_PCHCTRL [23] * (1 << 6)) == 0);
-    
-    /* To enable the filter and debouncer in EIC, the GCLK_EIC should be enabled */
-    GCLK_REGS->GCLK_PCHCTRL[4] = 0x00000040;
-    
-    EIC_Initialize();
-    NVIC_Initialize();
-}
 void PB_02_Init(void){
      /*
      *  Initializes PB02 acting as the potentiometer input.

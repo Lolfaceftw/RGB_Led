@@ -15,13 +15,13 @@
                    projectFiles="true">
     </logicalFolder>
     <logicalFolder name="SourceFiles" displayName="PA_04" projectFiles="true">
-      <itemPath>mini_project_1.c</itemPath>
-      <itemPath>pin_calculation.h</itemPath>
       <itemPath>eic.h</itemPath>
       <itemPath>init_io.h</itemPath>
       <itemPath>clk.h</itemPath>
       <itemPath>adc.h</itemPath>
       <itemPath>sw_fcns.h</itemPath>
+      <itemPath>start.h</itemPath>
+      <itemPath>main.c</itemPath>
     </logicalFolder>
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>
