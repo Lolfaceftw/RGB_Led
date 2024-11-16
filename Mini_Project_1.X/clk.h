@@ -19,7 +19,7 @@ void TCC3_Init(int brightness) {
     TCC3_REGS->TCC_CTRLA = (1 << 12) | (7 << 8); // Precsync = PRESC | Prescaler = 1024
     
     TCC3_REGS->TCC_WEXCTRL = TCC_WEXCTRL_OTMX(0UL); // Default configuration
-    TCC3_REGS->TCC_WAVE = (2 << 0) | (0 << 4) | (1<<17);  // 0x2 NPWM Normal PWM PER TOP/Zero or Single slope PWM
+    TCC3_REGS->TCC_WAVE = (2 << 0) | (0 << 4) | (1<<17) | (1 << 16) | (1 << 19);  // 0x2 NPWM Normal PWM PER TOP/Zero or Single slope PWM
                                                 // RAMP 1 operation (Polarity 1) - bit 16, set at CCx, clear at TOP 
     
     /* Configure duty cycle values */    
@@ -33,17 +33,20 @@ void TCC3_Init(int brightness) {
     
     /* Set the duty cycle or brightness @ default 50% */
     // PA03 WO[1]
-    TCC3_REGS->TCC_CC[1] = brightness;
+    TCC3_REGS->TCC_CC[1] = 0;
     
     // PA06 WO[4]
-    TCC3_REGS->TCC_CC[4] = brightness;
+    TCC3_REGS->TCC_CC[0] = 0;
     
     // PB03 WO[3]
-    TCC3_REGS->TCC_CC[3] = brightness;  
+    TCC3_REGS->TCC_CC[3] = 0;  
     
     /* TCC enable */
     TCC3_REGS->TCC_CTRLA |= (1 << 1); // Enables TCC
     while(TCC3_REGS->TCC_SYNCBUSY & ~(1<<1)); // Wait for synchronization
+    while(TCC3_REGS->TCC_SYNCBUSY & ~(1<<8)); // Wait for synchronization
+    while(TCC3_REGS->TCC_SYNCBUSY & ~(1<<9)); // Wait for synchronization
+    while(TCC3_REGS->TCC_SYNCBUSY & ~(1<<11)); // Wait for synchronization
     
 }
  
