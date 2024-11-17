@@ -32,6 +32,7 @@ void Clocks_Init(void){
     ADC_Enable();
     
     // Initialize TCC3
+    TC0_Init();
     TCC3_Init();
 }
 
