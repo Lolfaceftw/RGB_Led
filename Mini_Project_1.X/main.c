@@ -11,7 +11,6 @@
 #include "start.h"
 
 void Start(void);
-float multiplier = 0.5f;
 int normal = 1;
 int pls_freeze = 1;
 
@@ -19,7 +18,7 @@ int main(int argc, char** argv) {
 
     Start();
     while (1) {
-        Cycle_RGB(multiplier, normal);
+        Cycle_RGB(normal);
     }
 
     return (EXIT_SUCCESS);

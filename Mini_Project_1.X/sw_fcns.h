@@ -5,10 +5,9 @@
 extern volatile unsigned int brightness;
 volatile unsigned int x;
 volatile unsigned int decreasing_brightness = 0;
-extern float multiplier;
+float multiplier = 0.5f;
 extern int normal;
 extern int pls_freeze;
-
 #define IN_RANGE(n, min, max) ((n) >= (min) && (n) < (max))
 #define INIT_TOP 468 // Let x be the PER value, $100 Hz=\frac{48e6}{1024(x+1)}$
 
@@ -61,28 +60,29 @@ void TC0_Wait(void) {
     TC0_REGS->COUNT16.TC_INTFLAG = (1 << 4);
 }
 
-void Cycle_RGB(float mult, int normal) {
+void Cycle_RGB(int normal) {
     /*
      * Cycles through RGB colors based on direction and multiplier, respecting freeze state.
-     * @param mult: the multiplier for adjusting brightness.
+     * @param multiplier: the multiplier for adjusting brightness.
      * @param normal: the direction (1 for forward, 0 for reverse).
-     */
-    if (pls_freeze == 1){
+     */ 
+    if (pls_freeze == 1) {
         freeze = 1;
         pls_freeze = 0;
-                    TCC3_REGS->TCC_CC[1] = RGB_to_CC(mult * colors[0][0]);
-                    TCC3_REGS->TCC_CC[0] = RGB_to_CC(mult * colors[0][1]);
-                    TCC3_REGS->TCC_CC[3] = RGB_to_CC(mult * colors[0][2]);
-    }   
+        TCC3_REGS->TCC_CC[1] = RGB_to_CC(multiplier * colors[0][0]);
+        TCC3_REGS->TCC_CC[0] = RGB_to_CC(multiplier * colors[0][1]);
+        TCC3_REGS->TCC_CC[3] = RGB_to_CC(multiplier * colors[0][2]);
+    }
     if (came_from_freeze == 0) {
         // Default behavior when not coming from freeze
         if (freeze == 0) {
             if (normal == 1) {
                 // Forward direction
                 for (i = 0; i <= 4; i++) {
-                    TCC3_REGS->TCC_CC[1] = RGB_to_CC(mult * colors[i][0]);
-                    TCC3_REGS->TCC_CC[0] = RGB_to_CC(mult * colors[i][1]);
-                    TCC3_REGS->TCC_CC[3] = RGB_to_CC(mult * colors[i][2]);
+                    k = i;
+                    TCC3_REGS->TCC_CC[1] = RGB_to_CC(multiplier * colors[i][0]);
+                    TCC3_REGS->TCC_CC[0] = RGB_to_CC(multiplier * colors[i][1]);
+                    TCC3_REGS->TCC_CC[3] = RGB_to_CC(multiplier * colors[i][2]);
                     TC0_Wait();
                     j = i; // Save current index
 
@@ -94,9 +94,10 @@ void Cycle_RGB(float mult, int normal) {
             } else if (normal == 0) {
                 // Reverse direction
                 for (i = 4; i >= 0; i--) {
-                    TCC3_REGS->TCC_CC[1] = RGB_to_CC(mult * colors[i][0]);
-                    TCC3_REGS->TCC_CC[0] = RGB_to_CC(mult * colors[i][1]);
-                    TCC3_REGS->TCC_CC[3] = RGB_to_CC(mult * colors[i][2]);
+                    k = i;
+                    TCC3_REGS->TCC_CC[1] = RGB_to_CC(multiplier * colors[i][0]);
+                    TCC3_REGS->TCC_CC[0] = RGB_to_CC(multiplier * colors[i][1]);
+                    TCC3_REGS->TCC_CC[3] = RGB_to_CC(multiplier * colors[i][2]);
                     TC0_Wait();
                     j = i; // Save current index
 
@@ -112,9 +113,10 @@ void Cycle_RGB(float mult, int normal) {
         if (normal == 1) {
             // Forward direction
             for (i = j; i <= 4; i++) {
-                TCC3_REGS->TCC_CC[1] = RGB_to_CC(mult * colors[i][0]);
-                TCC3_REGS->TCC_CC[0] = RGB_to_CC(mult * colors[i][1]);
-                TCC3_REGS->TCC_CC[3] = RGB_to_CC(mult * colors[i][2]);
+                k = i;
+                TCC3_REGS->TCC_CC[1] = RGB_to_CC(multiplier * colors[i][0]);
+                TCC3_REGS->TCC_CC[0] = RGB_to_CC(multiplier * colors[i][1]);
+                TCC3_REGS->TCC_CC[3] = RGB_to_CC(multiplier * colors[i][2]);
                 TC0_Wait();
                 j = i; // Save current index
 
@@ -127,9 +129,10 @@ void Cycle_RGB(float mult, int normal) {
         } else if (normal == 0) {
             // Reverse direction
             for (i = j; i >= 0; i--) {
-                TCC3_REGS->TCC_CC[1] = RGB_to_CC(mult * colors[i][0]);
-                TCC3_REGS->TCC_CC[0] = RGB_to_CC(mult * colors[i][1]);
-                TCC3_REGS->TCC_CC[3] = RGB_to_CC(mult * colors[i][2]);
+                k = i;
+                TCC3_REGS->TCC_CC[1] = RGB_to_CC(multiplier * colors[i][0]);
+                TCC3_REGS->TCC_CC[0] = RGB_to_CC(multiplier * colors[i][1]);
+                TCC3_REGS->TCC_CC[3] = RGB_to_CC(multiplier * colors[i][2]);
                 TC0_Wait();
                 j = i; // Save current index
 
@@ -145,11 +148,16 @@ void Cycle_RGB(float mult, int normal) {
 
 void Adjust_Brightness(uint16_t adc_value) {
     /**
-     * A simple function that overwrites the global variable multipli depending on the adc_value.
+     * A simple function that overwrites the global variable multiplier depending on the adc_value.
      * Since it is 10 bits, we want the multiplier to be 1 when ADC value is 0 (full clockwise) and vice versa.
      * @param adc_value: the adc value from the potentiometer reading.
      */
     multiplier = 1 - (adc_value / 1028.0f);
+    if (freeze == 0){
+    TCC3_REGS->TCC_CC[1] = RGB_to_CC(multiplier * colors[k][0]);
+    TCC3_REGS->TCC_CC[0] = RGB_to_CC(multiplier * colors[k][1]);
+    TCC3_REGS->TCC_CC[3] = RGB_to_CC(multiplier * colors[k][2]);
+    }
     if (freeze == 1) {
         TCC3_REGS->TCC_CC[1] = RGB_to_CC(multiplier * colors[j][0]);
         TCC3_REGS->TCC_CC[0] = RGB_to_CC(multiplier * colors[j][1]);
