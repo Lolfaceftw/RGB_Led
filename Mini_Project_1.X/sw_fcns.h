@@ -6,7 +6,6 @@ extern volatile unsigned int brightness;
 volatile unsigned int x;
 volatile unsigned int decreasing_brightness = 0;
 extern float multiplier;
-extern int delay;
 extern int normal;
 
 #define IN_RANGE(n, min, max) ((n) >= (min) && (n) < (max))
@@ -32,13 +31,18 @@ int colors[5][3] = {
     {16, 233, 110},
 };
 
+int read_count(){
+    // Allow read access of COUNT register
+    // Return back the counter value
+    TC0_REGS -> COUNT16.TC_CTRLBSET = (0x4 << 5);
+    return TC0_REGS -> COUNT16.TC_COUNT; // 39.8.13
+    
+}
 
-
-void Cycle_RGB(float mult, int delay, int normal){
+void Cycle_RGB(float mult, int normal){
     /*
      * 
      * @param mult: the main multiplier for the colors to adjust the brightness.
-     * @param delay: a cheap way to adjust the period per color than using a clock.
      * @param normal: see if the direction should be normal or reversed. 1 is normal and 0 is reversed.
      */
    // if (freeze == 0){
@@ -50,7 +54,7 @@ void Cycle_RGB(float mult, int delay, int normal){
         TCC3_REGS->TCC_CC[0] = RGB_to_CC(mult*colors[i][1]);
         TCC3_REGS->TCC_CC[3] = RGB_to_CC(mult*colors[i][2]);
         j = i;
-        delay_ms(delay);
+        while(read_count() < TC0_REGS -> COUNT16.TC_CC[0]);
         if (freeze == 1){
             break;
         }
@@ -62,7 +66,7 @@ void Cycle_RGB(float mult, int delay, int normal){
         TCC3_REGS->TCC_CC[0] = RGB_to_CC(mult*colors[i][1]);
         TCC3_REGS->TCC_CC[3] = RGB_to_CC(mult*colors[i][2]);
         j = i;
-        delay_ms(delay);
+        while(read_count() < TC0_REGS -> COUNT16.TC_CC[0]);
         if (freeze == 1){
             break;
         }
@@ -98,21 +102,21 @@ void Adjust_Period_and_Direction(uint16_t adc_value){
          */
         if (IN_RANGE(adc_value, 0, 206)){
             normal = 1;
-            delay = 400;
+            TC0_REGS -> COUNT16.TC_CC[0] = (0x32C8);
             freeze = 0;
         } else if (IN_RANGE(adc_value, 206, 410)){
             normal = 1;
-            delay = 800;
+            TC0_REGS -> COUNT16.TC_CC[0] = (0x32C8) * 2;
             freeze = 0;
         } else if (IN_RANGE(adc_value, 410, 614)){
             freeze = 1;
         } else if (IN_RANGE(adc_value, 614, 819)){
             normal = 0;
-            delay = 800;
+            TC0_REGS -> COUNT16.TC_CC[0] = (0x32C8) * 2;
             freeze = 0;
         } else if (IN_RANGE(adc_value, 819, 1024)){
             normal = 0;
-            delay = 400;
+            TC0_REGS -> COUNT16.TC_CC[0] = (0x32C8);
             freeze = 0;
         }
 }

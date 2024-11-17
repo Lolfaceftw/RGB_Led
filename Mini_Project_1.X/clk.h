@@ -67,13 +67,13 @@ void Clock_Source(void){
     while((OSCCTRL_REGS->OSCCTRL_STATUS & (1<<24)) != (1<<24)); /* Waiting for DFLL to be ready */
     
     /****************** GCLK 0 Initialization  *********************/    
-    GCLK_REGS->GCLK_GENCTRL[0] = (1<<16) | (7<<0) | (1<<8);
+    GCLK_REGS->GCLK_GENCTRL[0] |= (1<<16) | (7<<0) | (1<<8);
     //while(GCLK_REGS->GCLK_SYNCBUSY & ~(1<<2));
     while(GCLK_REGS->GCLK_SYNCBUSY & (1<<2))
         asm("nop");
     
     // ADC Bus Clock: Generic Clock Generator Value | Channel Enable
-    GCLK_REGS -> GCLK_PCHCTRL[28] = (0 << 0) | (1 << 6);
+    GCLK_REGS -> GCLK_PCHCTRL[28] |= (0 << 0) | (1 << 6);
     while((GCLK_REGS -> GCLK_PCHCTRL[28] & (1 << 6)) != (1 << 6));
 }
 
@@ -94,7 +94,7 @@ void TC0_Init(void){
     TC0_REGS -> COUNT16.TC_WAVE |= (0x1 << 0); // Use MFRQ Bit [1:0]
     
     // Setting the Top Value
-    TC0_REGS -> COUNT16.TC_CC[0] |= (0xB71B); // Set CC0 Top Value = 48e6/1024 = 46875 (1s Period)
+    TC0_REGS -> COUNT16.TC_CC[0] |= (0x32C8); // Set CC0 Top Value = 48e6/1024 = 46875 (18750: 400m    s Period)
   
     
     TC0_REGS -> COUNT16.TC_CTRLA |= (1 << 1); // Enable TC0 Peripheral Bit 1
