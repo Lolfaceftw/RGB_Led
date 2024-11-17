@@ -25,6 +25,7 @@ int i;
 int j;
 int k;
 int z;
+int from_normal;
 int came_from_freeze = 0;
 
 int colors[5][3] = {
@@ -87,9 +88,17 @@ void Cycle_RGB(int normal) {
             if (freeze == 1) {
                 return;
             }
+            // Check if normal changed
+            if (normal == 0) {
+                return;
+            }
             TC0_Wait();
             // Check for freeze
             if (freeze == 1) {
+                return;
+            }
+            // Check if normal changed
+            if (normal == 0) {
                 return;
             }
             i++;
@@ -101,7 +110,15 @@ void Cycle_RGB(int normal) {
             if (freeze == 1) {
                 return;
             }
+            // Check if normal changed
+            if (normal == 1) {
+                return;
+            }
             TC0_Wait();
+            // Check if normal changed
+            if (normal == 1) {
+                return;
+            }
             i--;
             if (i == -1) {
                 i = 4;
@@ -114,6 +131,10 @@ void Cycle_RGB(int normal) {
         TCC3_REGS->TCC_CC[3] = RGB_to_CC(multiplier * colors[i][2]);
         // Check freeze
         if (freeze == 1) {
+            return;
+        }
+        // Check if normal changed
+        if (normal == 1) {
             return;
         }
     }
