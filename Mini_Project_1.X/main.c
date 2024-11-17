@@ -19,8 +19,8 @@ int main(int argc, char** argv) {
     Start();
     while (1) {
         Cycle_RGB(multiplier, normal);
-}
-       
+    }
+
     return (EXIT_SUCCESS);
 }
 

@@ -7,22 +7,22 @@ void ADC_ConversionStart(void);
 bool ADC_ConversionStatusGet(Void);
 void delay_ms(int delay);
 
-void ADC_Initialize(void){
+void ADC_Initialize(void) {
     /* Reset ADC */
-    ADC_REGS -> ADC_CTRLA |= (1 <<0);
-    while ((ADC_REGS -> ADC_SYNCBUSY & (1 <<0)) == (1 <<0));
+    ADC_REGS -> ADC_CTRLA |= (1 << 0);
+    while ((ADC_REGS -> ADC_SYNCBUSY & (1 << 0)) == (1 << 0));
     /* Prescaler */
-    ADC_REGS -> ADC_CTRLB |= (2 <<0);
+    ADC_REGS -> ADC_CTRLB |= (2 << 0);
     /* Sampling length */
-    ADC_REGS -> ADC_SAMPCTRL |= (3 <<0);
+    ADC_REGS -> ADC_SAMPCTRL |= (3 << 0);
     /* Reference */
-    ADC_REGS -> ADC_REFCTRL |= (0x5 <<0); // AVDD w/o multiplier
+    ADC_REGS -> ADC_REFCTRL |= (0x5 << 0); // AVDD w/o multiplier
     /* Input pin */
     ADC_REGS -> ADC_INPUTCTRL |= (0xA << 0); // AIN[10]
     /* Resolution & Operation Mode */
-    ADC_REGS -> ADC_CTRLC = (uint16_t)((0x2 << 4) | (0 << 8)); // 10 Bits
+    ADC_REGS -> ADC_CTRLC = (uint16_t) ((0x2 << 4) | (0 << 8)); // 10 Bits
     /* Clear all interrupt flags */
-    ADC_REGS -> ADC_INTFLAG |= (uint8_t)0x07;
+    ADC_REGS -> ADC_INTFLAG |= (uint8_t) 0x07;
     while (0U != ADC_REGS -> ADC_SYNCBUSY);
 
 }
@@ -40,15 +40,15 @@ void ADC_ConversionStart(void) {
 }
 
 // Read Conversion Result
-uint16_t ADC_ConversionResultGet ( void )
-{
-return (uint16_t) ADC_REGS -> ADC_RESULT ;
+
+uint16_t ADC_ConversionResultGet(void) {
+    return (uint16_t) ADC_REGS -> ADC_RESULT;
 }
 
 /* Check whether result is ready */
 bool ADC_ConversionStatusGet(void) {
     bool status;
-    status = (((ADC_REGS -> ADC_INTFLAG & (1 <<0)) >> 0) != 0U);
+    status = (((ADC_REGS -> ADC_INTFLAG & (1 << 0)) >> 0) != 0U);
     if (status == true) {
         ADC_REGS -> ADC_INTFLAG |= (1 << 0);
     }
@@ -57,7 +57,7 @@ bool ADC_ConversionStatusGet(void) {
 
 void delay_ms(int delay) {
     int i;
-    for (; delay > 0; delay --) {
+    for (; delay > 0; delay--) {
         for (i = 0; i < 2657; i++);
     }
 }
