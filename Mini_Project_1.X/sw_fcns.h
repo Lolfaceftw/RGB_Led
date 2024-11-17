@@ -23,8 +23,12 @@ int direction = 1;
 int freeze = 0;
 int i;
 int j;
+int k;
+int z;
+int came_from_freeze = 0;
+
 int colors[5][3] = {
-    {122, 31, 206},
+    {122, 31, 206}, 
     {229, 124 ,22},
     {79, 229, 22},
     {22, 221, 229},
@@ -34,46 +38,103 @@ int colors[5][3] = {
 int read_count(){
     // Allow read access of COUNT register
     // Return back the counter value
-    TC0_REGS -> COUNT16.TC_CTRLBSET = (0x4 << 5);
+    TC0_REGS -> COUNT16.TC_CTRLBSET |= (0x4 << 5);
     return TC0_REGS -> COUNT16.TC_COUNT; // 39.8.13
     
 }
+void TC0_Wait(void) {
+    // Clear the interrupt flag for match compare 0
+    TC0_REGS->COUNT16.TC_INTFLAG = (1 << 4);
 
-void Cycle_RGB(float mult, int normal){
+    // Start the timer by resetting the counter
+    TC0_REGS->COUNT16.TC_CTRLBSET = (1 << 0); // Command: Restart
+    while (TC0_REGS->COUNT16.TC_SYNCBUSY & (1 << 0)); // Wait for sync
+
+    // Wait for the match compare flag to be set
+    while (!(TC0_REGS->COUNT16.TC_INTFLAG & (1 << 4))) {
+        // Do nothing, just wait for the timer to reach the compare value
+    }
+
+    // Clear the interrupt flag again after the wait
+    TC0_REGS->COUNT16.TC_INTFLAG = (1 << 4);
+}
+
+void Cycle_RGB(float mult, int normal) {
     /*
-     * 
-     * @param mult: the main multiplier for the colors to adjust the brightness.
-     * @param normal: see if the direction should be normal or reversed. 1 is normal and 0 is reversed.
+     * Cycles through RGB colors based on direction and multiplier, respecting freeze state.
+     * @param mult: the multiplier for adjusting brightness.
+     * @param normal: the direction (1 for forward, 0 for reverse).
      */
-   // if (freeze == 0){
-   
-        if (normal == 1){
-        for (i = 0; i <= 4; i++){
-        
-        TCC3_REGS->TCC_CC[1] = RGB_to_CC(mult*colors[i][0]);
-        TCC3_REGS->TCC_CC[0] = RGB_to_CC(mult*colors[i][1]);
-        TCC3_REGS->TCC_CC[3] = RGB_to_CC(mult*colors[i][2]);
-        j = i;
-        while(read_count() < TC0_REGS -> COUNT16.TC_CC[0]);
-        if (freeze == 1){
-            break;
-        }
-        }
-    } else if (normal == 0){
-        for (i = 4; i >= 0; i--){
 
-        TCC3_REGS->TCC_CC[1] = RGB_to_CC(mult*colors[i][0]);
-        TCC3_REGS->TCC_CC[0] = RGB_to_CC(mult*colors[i][1]);
-        TCC3_REGS->TCC_CC[3] = RGB_to_CC(mult*colors[i][2]);
-        j = i;
-        while(read_count() < TC0_REGS -> COUNT16.TC_CC[0]);
-        if (freeze == 1){
-            break;
-        }
+    if (came_from_freeze == 0) {
+        // Default behavior when not coming from freeze
+        if (freeze == 0) {
+            if (normal == 1) {
+                // Forward direction
+                for (i = 0; i <= 4; i++) {
+                    TCC3_REGS->TCC_CC[1] = RGB_to_CC(mult * colors[i][0]);
+                    TCC3_REGS->TCC_CC[0] = RGB_to_CC(mult * colors[i][1]);
+                    TCC3_REGS->TCC_CC[3] = RGB_to_CC(mult * colors[i][2]);
+                    TC0_Wait();
+                    j = i; // Save current index
+
+                    if (freeze == 1) {
+                        came_from_freeze = 1; // Mark as coming from freeze
+                        break;
+                    }
+                }
+            } else if (normal == 0) {
+                // Reverse direction
+                for (i = 4; i >= 0; i--) {
+                    TCC3_REGS->TCC_CC[1] = RGB_to_CC(mult * colors[i][0]);
+                    TCC3_REGS->TCC_CC[0] = RGB_to_CC(mult * colors[i][1]);
+                    TCC3_REGS->TCC_CC[3] = RGB_to_CC(mult * colors[i][2]);
+                    TC0_Wait();
+                    j = i; // Save current index
+
+                    if (freeze == 1) {
+                        came_from_freeze = 1; // Mark as coming from freeze
+                        break;
+                    }
+                }
             }
         }
-    //}
+    } else if (came_from_freeze == 1) {
+        // Resuming after freeze
+        if (normal == 1) {
+            // Forward direction
+            for (i = j; i <= 4; i++) {
+                TCC3_REGS->TCC_CC[1] = RGB_to_CC(mult * colors[i][0]);
+                TCC3_REGS->TCC_CC[0] = RGB_to_CC(mult * colors[i][1]);
+                TCC3_REGS->TCC_CC[3] = RGB_to_CC(mult * colors[i][2]);
+                TC0_Wait();
+                j = i; // Save current index
+
+                if (freeze == 1) {
+                    came_from_freeze = 1; // Stay in freeze
+                    break;
+                }
+                came_from_freeze = 0; // Reset freeze flag after completing cycle
+            }
+        } else if (normal == 0) {
+            // Reverse direction
+            for (i = j; i >= 0; i--) {
+                TCC3_REGS->TCC_CC[1] = RGB_to_CC(mult * colors[i][0]);
+                TCC3_REGS->TCC_CC[0] = RGB_to_CC(mult * colors[i][1]);
+                TCC3_REGS->TCC_CC[3] = RGB_to_CC(mult * colors[i][2]);
+                TC0_Wait();
+                j = i; // Save current index
+
+                if (freeze == 1) {
+                    came_from_freeze = 1; // Stay in freeze
+                    break;
+                }
+                came_from_freeze = 0; // Reset freeze flag after completing cycle
+            }
+        }
+    }
 }
+
 
 void Adjust_Brightness(uint16_t adc_value) {
     /**
@@ -102,21 +163,30 @@ void Adjust_Period_and_Direction(uint16_t adc_value){
          */
         if (IN_RANGE(adc_value, 0, 206)){
             normal = 1;
+            while (TC0_REGS->COUNT16.TC_SYNCBUSY & (1 << 0));
             TC0_REGS -> COUNT16.TC_CC[0] = (0x32C8);
+            while (TC0_REGS->COUNT16.TC_SYNCBUSY & (1 << 0));
             freeze = 0;
         } else if (IN_RANGE(adc_value, 206, 410)){
             normal = 1;
+            while (TC0_REGS->COUNT16.TC_SYNCBUSY & (1 << 0));
             TC0_REGS -> COUNT16.TC_CC[0] = (0x32C8) * 2;
+            while (TC0_REGS->COUNT16.TC_SYNCBUSY & (1 << 0));
             freeze = 0;
         } else if (IN_RANGE(adc_value, 410, 614)){
             freeze = 1;
+            came_from_freeze = 1;
         } else if (IN_RANGE(adc_value, 614, 819)){
             normal = 0;
+            while (TC0_REGS->COUNT16.TC_SYNCBUSY & (1 << 0));
             TC0_REGS -> COUNT16.TC_CC[0] = (0x32C8) * 2;
+            while (TC0_REGS->COUNT16.TC_SYNCBUSY & (1 << 0));
             freeze = 0;
         } else if (IN_RANGE(adc_value, 819, 1024)){
             normal = 0;
+            while (TC0_REGS->COUNT16.TC_SYNCBUSY & (1 << 0));
             TC0_REGS -> COUNT16.TC_CC[0] = (0x32C8);
+            while (TC0_REGS->COUNT16.TC_SYNCBUSY & (1 << 0));
             freeze = 0;
         }
 }

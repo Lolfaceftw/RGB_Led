@@ -95,10 +95,8 @@ void TC0_Init(void){
     
     // Setting the Top Value
     TC0_REGS -> COUNT16.TC_CC[0] |= (0x32C8); // Set CC0 Top Value = 48e6/1024 = 46875*0.2733 =  (400ms Period)
-    // Accounted for discrepancies
-  
     
     TC0_REGS -> COUNT16.TC_CTRLA |= (1 << 1); // Enable TC0 Peripheral Bit 1
- 
+    while (TC0_REGS -> COUNT16.TC_SYNCBUSY & (1 << 1));
 }
 #endif
