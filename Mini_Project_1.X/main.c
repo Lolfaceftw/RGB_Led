@@ -13,6 +13,7 @@
 void Start(void);
 float multiplier = 0.5f;
 int normal = 1;
+int pls_freeze = 1;
 
 int main(int argc, char** argv) {
 

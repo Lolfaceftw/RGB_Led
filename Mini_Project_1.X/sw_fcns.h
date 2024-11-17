@@ -7,6 +7,7 @@ volatile unsigned int x;
 volatile unsigned int decreasing_brightness = 0;
 extern float multiplier;
 extern int normal;
+extern int pls_freeze;
 
 #define IN_RANGE(n, min, max) ((n) >= (min) && (n) < (max))
 #define INIT_TOP 468 // Let x be the PER value, $100 Hz=\frac{48e6}{1024(x+1)}$
@@ -66,7 +67,13 @@ void Cycle_RGB(float mult, int normal) {
      * @param mult: the multiplier for adjusting brightness.
      * @param normal: the direction (1 for forward, 0 for reverse).
      */
-
+    if (pls_freeze == 1){
+        freeze = 1;
+        pls_freeze = 0;
+                    TCC3_REGS->TCC_CC[1] = RGB_to_CC(mult * colors[0][0]);
+                    TCC3_REGS->TCC_CC[0] = RGB_to_CC(mult * colors[0][1]);
+                    TCC3_REGS->TCC_CC[3] = RGB_to_CC(mult * colors[0][2]);
+    }   
     if (came_from_freeze == 0) {
         // Default behavior when not coming from freeze
         if (freeze == 0) {
