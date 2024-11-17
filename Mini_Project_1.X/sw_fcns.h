@@ -65,85 +65,59 @@ void Cycle_RGB(int normal) {
      * Cycles through RGB colors based on direction and multiplier, respecting freeze state.
      * @param multiplier: the multiplier for adjusting brightness.
      * @param normal: the direction (1 for forward, 0 for reverse).
-     */ 
+     */
+    // Initial Freeze
     if (pls_freeze == 1) {
         freeze = 1;
         pls_freeze = 0;
-        TCC3_REGS->TCC_CC[1] = RGB_to_CC(multiplier * colors[0][0]);
-        TCC3_REGS->TCC_CC[0] = RGB_to_CC(multiplier * colors[0][1]);
-        TCC3_REGS->TCC_CC[3] = RGB_to_CC(multiplier * colors[0][2]);
+        i = 0;
     }
-    if (came_from_freeze == 0) {
-        // Default behavior when not coming from freeze
-        if (freeze == 0) {
-            if (normal == 1) {
-                // Forward direction
-                for (i = 0; i <= 4; i++) {
-                    k = i;
-                    TCC3_REGS->TCC_CC[1] = RGB_to_CC(multiplier * colors[i][0]);
-                    TCC3_REGS->TCC_CC[0] = RGB_to_CC(multiplier * colors[i][1]);
-                    TCC3_REGS->TCC_CC[3] = RGB_to_CC(multiplier * colors[i][2]);
-                    TC0_Wait();
-                    j = i; // Save current index
 
-                    if (freeze == 1) {
-                        came_from_freeze = 1; // Mark as coming from freeze
-                        break;
-                    }
-                }
-            } else if (normal == 0) {
-                // Reverse direction
-                for (i = 4; i >= 0; i--) {
-                    k = i;
-                    TCC3_REGS->TCC_CC[1] = RGB_to_CC(multiplier * colors[i][0]);
-                    TCC3_REGS->TCC_CC[0] = RGB_to_CC(multiplier * colors[i][1]);
-                    TCC3_REGS->TCC_CC[3] = RGB_to_CC(multiplier * colors[i][2]);
-                    TC0_Wait();
-                    j = i; // Save current index
-
-                    if (freeze == 1) {
-                        came_from_freeze = 1; // Mark as coming from freeze
-                        break;
-                    }
-                }
-            }
+    if (freeze == 1) {
+        TCC3_REGS->TCC_CC[1] = RGB_to_CC(multiplier * colors[i][0]);
+        TCC3_REGS->TCC_CC[0] = RGB_to_CC(multiplier * colors[i][1]);
+        TCC3_REGS->TCC_CC[3] = RGB_to_CC(multiplier * colors[i][2]);
+    } else {
+        if (freeze == 1) {
+            return;
         }
-    } else if (came_from_freeze == 1) {
-        // Resuming after freeze
-        if (normal == 1) {
-            // Forward direction
-            for (i = j; i <= 4; i++) {
-                k = i;
-                TCC3_REGS->TCC_CC[1] = RGB_to_CC(multiplier * colors[i][0]);
-                TCC3_REGS->TCC_CC[0] = RGB_to_CC(multiplier * colors[i][1]);
-                TCC3_REGS->TCC_CC[3] = RGB_to_CC(multiplier * colors[i][2]);
-                TC0_Wait();
-                j = i; // Save current index
-
-                if (freeze == 1) {
-                    came_from_freeze = 1; // Stay in freeze
-                    break;
-                }
-                came_from_freeze = 0; // Reset freeze flag after completing cycle
+        // If normal direction
+        if (normal == 1 && i >= 0 && i <= 4) {
+            // Check for freeze
+            if (freeze == 1) {
+                return;
             }
-        } else if (normal == 0) {
-            // Reverse direction
-            for (i = j; i >= 0; i--) {
-                k = i;
-                TCC3_REGS->TCC_CC[1] = RGB_to_CC(multiplier * colors[i][0]);
-                TCC3_REGS->TCC_CC[0] = RGB_to_CC(multiplier * colors[i][1]);
-                TCC3_REGS->TCC_CC[3] = RGB_to_CC(multiplier * colors[i][2]);
-                TC0_Wait();
-                j = i; // Save current index
-
-                if (freeze == 1) {
-                    came_from_freeze = 1; // Stay in freeze
-                    break;
-                }
-                came_from_freeze = 0; // Reset freeze flag after completing cycle
+            TC0_Wait();
+            // Check for freeze
+            if (freeze == 1) {
+                return;
             }
+            i++;
+            if (i == 5) {
+                i = 0;
+            } // If reverse direction
+        } else if (normal == 0 && i >= 0 && i <= 4) {
+            // Check freeze
+            if (freeze == 1) {
+                return;
+            }
+            TC0_Wait();
+            i--;
+            if (i == -1) {
+                i = 4;
+            }
+
+        }
+
+        TCC3_REGS->TCC_CC[1] = RGB_to_CC(multiplier * colors[i][0]);
+        TCC3_REGS->TCC_CC[0] = RGB_to_CC(multiplier * colors[i][1]);
+        TCC3_REGS->TCC_CC[3] = RGB_to_CC(multiplier * colors[i][2]);
+        // Check freeze
+        if (freeze == 1) {
+            return;
         }
     }
+
 }
 
 void Adjust_Brightness(uint16_t adc_value) {
@@ -153,16 +127,9 @@ void Adjust_Brightness(uint16_t adc_value) {
      * @param adc_value: the adc value from the potentiometer reading.
      */
     multiplier = 1 - (adc_value / 1028.0f);
-    if (freeze == 0){
-    TCC3_REGS->TCC_CC[1] = RGB_to_CC(multiplier * colors[k][0]);
-    TCC3_REGS->TCC_CC[0] = RGB_to_CC(multiplier * colors[k][1]);
-    TCC3_REGS->TCC_CC[3] = RGB_to_CC(multiplier * colors[k][2]);
-    }
-    if (freeze == 1) {
-        TCC3_REGS->TCC_CC[1] = RGB_to_CC(multiplier * colors[j][0]);
-        TCC3_REGS->TCC_CC[0] = RGB_to_CC(multiplier * colors[j][1]);
-        TCC3_REGS->TCC_CC[3] = RGB_to_CC(multiplier * colors[j][2]);
-    }
+    TCC3_REGS->TCC_CC[1] = RGB_to_CC(multiplier * colors[i][0]);
+    TCC3_REGS->TCC_CC[0] = RGB_to_CC(multiplier * colors[i][1]);
+    TCC3_REGS->TCC_CC[3] = RGB_to_CC(multiplier * colors[i][2]);
 }
 
 void Adjust_Period_and_Direction(uint16_t adc_value) {
