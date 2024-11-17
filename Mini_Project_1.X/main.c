@@ -12,14 +12,13 @@
 
 void Start(void);
 float multiplier = 0.5f;
-int delay = 400;
 int normal = 1;
 
 int main(int argc, char** argv) {
 
     Start();
     while (1) {
-        Cycle_RGB(multiplier, delay, normal);
+        Cycle_RGB(multiplier, normal);
 }
        
     return (EXIT_SUCCESS);

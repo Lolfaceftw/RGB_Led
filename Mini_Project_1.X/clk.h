@@ -67,13 +67,38 @@ void Clock_Source(void){
     while((OSCCTRL_REGS->OSCCTRL_STATUS & (1<<24)) != (1<<24)); /* Waiting for DFLL to be ready */
     
     /****************** GCLK 0 Initialization  *********************/    
-    GCLK_REGS->GCLK_GENCTRL[0] = (1<<16) | (7<<0) | (1<<8);
+    GCLK_REGS->GCLK_GENCTRL[0] |= (1<<16) | (7<<0) | (1<<8);
     //while(GCLK_REGS->GCLK_SYNCBUSY & ~(1<<2));
     while(GCLK_REGS->GCLK_SYNCBUSY & (1<<2))
         asm("nop");
     
     // ADC Bus Clock: Generic Clock Generator Value | Channel Enable
-    GCLK_REGS -> GCLK_PCHCTRL[28] = (0 << 0) | (1 << 6);
+    GCLK_REGS -> GCLK_PCHCTRL[28] |= (0 << 0) | (1 << 6);
     while((GCLK_REGS -> GCLK_PCHCTRL[28] & (1 << 6)) != (1 << 6));
+}
+
+void TC0_Init(void){
+    // Enable the TC0 Bus Clock
+    GCLK_REGS -> GCLK_PCHCTRL[23] |= (1 << 6); // Bit 6 Enable
+    while ((GCLK_REGS -> GCLK_PCHCTRL [23] * (1 << 6)) == 0);
+    
+    // Setting up the TC 0 -> CTRLA Register
+    TC0_REGS -> COUNT16.TC_CTRLA |= (1); // Software Reset; Bit 0
+    while(TC0_REGS -> COUNT16.TC_SYNCBUSY & (1));
+    
+    TC0_REGS -> COUNT16.TC_CTRLA |= (0x0 << 2); // Set to 16 bit mode; Bit[3:2].
+    TC0_REGS -> COUNT16.TC_CTRLA |= (0x1 << 4); // Reset counter on next prescaler clock Bit[5:4]]
+    TC0_REGS -> COUNT16.TC_CTRLA |= (0x7 << 8); // Prescaler Factor: 1024 Bit[10:8]]
+    
+    // Setting up the WAVE Register
+    TC0_REGS -> COUNT16.TC_WAVE |= (0x1 << 0); // Use MFRQ Bit [1:0]
+    
+    // Setting the Top Value
+    TC0_REGS -> COUNT16.TC_CC[0] |= (0x32C8); // Set CC0 Top Value = 48e6/1024 = 46875*0.2733 =  (400ms Period)
+    // Accounted for discrepancies
+  
+    
+    TC0_REGS -> COUNT16.TC_CTRLA |= (1 << 1); // Enable TC0 Peripheral Bit 1
+ 
 }
 #endif
