@@ -17,9 +17,9 @@ extern int normal;
 1: 4fe516 -> R : 79, G : 229, B : 22
 2: 16dde5 -> R : 22, G : 221, B : 229
 6: 10e96e -> R : 16, G : 233, B : 110
-*/
+ */
 uint16_t RGB_to_CC(uint8_t x);
-int direction = 1; 
+int direction = 1;
 int freeze = 0;
 int i;
 int j;
@@ -28,20 +28,21 @@ int z;
 int came_from_freeze = 0;
 
 int colors[5][3] = {
-    {122, 31, 206}, 
-    {229, 124 ,22},
+    {122, 31, 206},
+    {229, 124, 22},
     {79, 229, 22},
     {22, 221, 229},
     {16, 233, 110},
 };
 
-int read_count(){
+int read_count() {
     // Allow read access of COUNT register
     // Return back the counter value
     TC0_REGS -> COUNT16.TC_CTRLBSET |= (0x4 << 5);
     return TC0_REGS -> COUNT16.TC_COUNT; // 39.8.13
-    
+
 }
+
 void TC0_Wait(void) {
     // Clear the interrupt flag for match compare 0
     TC0_REGS->COUNT16.TC_INTFLAG = (1 << 4);
@@ -135,7 +136,6 @@ void Cycle_RGB(float mult, int normal) {
     }
 }
 
-
 void Adjust_Brightness(uint16_t adc_value) {
     /**
      * A simple function that overwrites the global variable multipli depending on the adc_value.
@@ -143,60 +143,60 @@ void Adjust_Brightness(uint16_t adc_value) {
      * @param adc_value: the adc value from the potentiometer reading.
      */
     multiplier = 1 - (adc_value / 1028.0f);
-    if (freeze == 1){
-        TCC3_REGS->TCC_CC[1] = RGB_to_CC(multiplier*colors[j][0]);
-        TCC3_REGS->TCC_CC[0] = RGB_to_CC(multiplier*colors[j][1]);
-        TCC3_REGS->TCC_CC[3] = RGB_to_CC(multiplier*colors[j][2]);
+    if (freeze == 1) {
+        TCC3_REGS->TCC_CC[1] = RGB_to_CC(multiplier * colors[j][0]);
+        TCC3_REGS->TCC_CC[0] = RGB_to_CC(multiplier * colors[j][1]);
+        TCC3_REGS->TCC_CC[3] = RGB_to_CC(multiplier * colors[j][2]);
     }
 }
 
-void Adjust_Period_and_Direction(uint16_t adc_value){
-        /* The function that adjusts the period per color and the direction.
-         * ADC Value: {%} * 2^10
-         * 0-20%: 0-205.8
-         * 20%-40%: 205.8 - 409.6
-         * 40%-60%: 614.4
-         * 60%-80%: 819.2
-         * 80%-100%: 1024
-         * To avoid floating point errors, rounded off the nearest whole number.
-         * @param adc_value: from the potentiometer input.
-         */
-        if (IN_RANGE(adc_value, 0, 206)){
-            normal = 1;
-            while (TC0_REGS->COUNT16.TC_SYNCBUSY & (1 << 0));
-            TC0_REGS -> COUNT16.TC_CC[0] = (0x32C8);
-            while (TC0_REGS->COUNT16.TC_SYNCBUSY & (1 << 0));
-            freeze = 0;
-        } else if (IN_RANGE(adc_value, 206, 410)){
-            normal = 1;
-            while (TC0_REGS->COUNT16.TC_SYNCBUSY & (1 << 0));
-            TC0_REGS -> COUNT16.TC_CC[0] = (0x32C8) * 2;
-            while (TC0_REGS->COUNT16.TC_SYNCBUSY & (1 << 0));
-            freeze = 0;
-        } else if (IN_RANGE(adc_value, 410, 614)){
-            freeze = 1;
-            came_from_freeze = 1;
-        } else if (IN_RANGE(adc_value, 614, 819)){
-            normal = 0;
-            while (TC0_REGS->COUNT16.TC_SYNCBUSY & (1 << 0));
-            TC0_REGS -> COUNT16.TC_CC[0] = (0x32C8) * 2;
-            while (TC0_REGS->COUNT16.TC_SYNCBUSY & (1 << 0));
-            freeze = 0;
-        } else if (IN_RANGE(adc_value, 819, 1024)){
-            normal = 0;
-            while (TC0_REGS->COUNT16.TC_SYNCBUSY & (1 << 0));
-            TC0_REGS -> COUNT16.TC_CC[0] = (0x32C8);
-            while (TC0_REGS->COUNT16.TC_SYNCBUSY & (1 << 0));
-            freeze = 0;
-        }
+void Adjust_Period_and_Direction(uint16_t adc_value) {
+    /* The function that adjusts the period per color and the direction.
+     * ADC Value: {%} * 2^10
+     * 0-20%: 0-205.8
+     * 20%-40%: 205.8 - 409.6
+     * 40%-60%: 614.4
+     * 60%-80%: 819.2
+     * 80%-100%: 1024
+     * To avoid floating point errors, rounded off the nearest whole number.
+     * @param adc_value: from the potentiometer input.
+     */
+    if (IN_RANGE(adc_value, 0, 206)) {
+        normal = 1;
+        while (TC0_REGS->COUNT16.TC_SYNCBUSY & (1 << 0));
+        TC0_REGS -> COUNT16.TC_CC[0] = (0x32C8);
+        while (TC0_REGS->COUNT16.TC_SYNCBUSY & (1 << 0));
+        freeze = 0;
+    } else if (IN_RANGE(adc_value, 206, 410)) {
+        normal = 1;
+        while (TC0_REGS->COUNT16.TC_SYNCBUSY & (1 << 0));
+        TC0_REGS -> COUNT16.TC_CC[0] = (0x32C8) * 2;
+        while (TC0_REGS->COUNT16.TC_SYNCBUSY & (1 << 0));
+        freeze = 0;
+    } else if (IN_RANGE(adc_value, 410, 614)) {
+        freeze = 1;
+        came_from_freeze = 1;
+    } else if (IN_RANGE(adc_value, 614, 819)) {
+        normal = 0;
+        while (TC0_REGS->COUNT16.TC_SYNCBUSY & (1 << 0));
+        TC0_REGS -> COUNT16.TC_CC[0] = (0x32C8) * 2;
+        while (TC0_REGS->COUNT16.TC_SYNCBUSY & (1 << 0));
+        freeze = 0;
+    } else if (IN_RANGE(adc_value, 819, 1024)) {
+        normal = 0;
+        while (TC0_REGS->COUNT16.TC_SYNCBUSY & (1 << 0));
+        TC0_REGS -> COUNT16.TC_CC[0] = (0x32C8);
+        while (TC0_REGS->COUNT16.TC_SYNCBUSY & (1 << 0));
+        freeze = 0;
+    }
 }
 
-uint16_t RGB_to_CC(uint8_t x){
+uint16_t RGB_to_CC(uint8_t x) {
     /**
      * An RGB to CC converter so I don't have to manually calculate converting from RGB to CC.
      * @param x: Either R, G, or B.
-     * @return: Appropriate CC PER value..
+     * @return: Appropriate CC PER value.
      */
-    return (uint16_t)(INIT_TOP * (1.0f - (float)x / 255.0f));
+    return (uint16_t) (INIT_TOP * (1.0f - (float) x / 255.0f));
 }
 #endif

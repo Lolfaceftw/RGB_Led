@@ -8,21 +8,21 @@ void PB_03_Init(void);
 void SW_1_Init(void);
 void SW_2_Init(void);
 
-void PB_02_Init(void){
-     /*
+void PB_02_Init(void) {
+    /*
      *  Initializes PB02 acting as the potentiometer input.
      * 
      *  Group 1: Address Spacing 0x80
      *  Target: PMUX Enabled; ADC Selected
-      * DIR: 0, INEN: 1, PULLEN: 1, OUT: 1
+     * DIR: 0, INEN: 1, PULLEN: 1, OUT: 1
      */
-    PORT_SEC_REGS -> GROUP[1].PORT_DIRCLR|= (1 << 2); // Clear DIR for Input
-    PORT_SEC_REGS -> GROUP[1].PORT_OUTSET |= (1 << 2); 
+    PORT_SEC_REGS -> GROUP[1].PORT_DIRCLR |= (1 << 2); // Clear DIR for Input
+    PORT_SEC_REGS -> GROUP[1].PORT_OUTSET |= (1 << 2);
     PORT_SEC_REGS -> GROUP[1].PORT_PINCFG[2] |= (0x3 << 0); // PMUX EN and InEN 1
     PORT_SEC_REGS -> GROUP[1].PORT_PMUX[1] |= (0x1 << 0); // Peripheral B
 }
 
-void PA_03_Init(void) {    
+void PA_03_Init(void) {
     /*
      *  Initializes PA03 acting as the R channel, active-HI.
      * 
@@ -40,7 +40,7 @@ void PA_03_Init(void) {
     PORT_SEC_REGS->GROUP[0].PORT_PMUX[1] |= (0x9 << 4); // J Peripheral for PA03, PMUXO[3:0], required PMUXEN 1
 }
 
-void PA_06_Init(void) {    
+void PA_06_Init(void) {
     /*
      *  Initializes PA06 acting as the G channel, active-HI.
      * 
@@ -58,7 +58,7 @@ void PA_06_Init(void) {
     PORT_SEC_REGS->GROUP[0].PORT_PMUX[3] |= (0x9 << 0); // J Peripheral for PA06, PMUXE[3:0], required PMUXEN 1
 }
 
-void PB_03_Init(void) {    
+void PB_03_Init(void) {
     /*
      *  Initializes PB03 acting as the B channel, active-HI.
      * 
@@ -76,8 +76,7 @@ void PB_03_Init(void) {
     PORT_SEC_REGS->GROUP[1].PORT_PMUX[1] |= (0x9 << 4); // J Peripheral for PB03, PMUXO[3:0], required PMUXEN 1
 }
 
-
-void SW_1_Init(void){
+void SW_1_Init(void) {
     /*
      *  Initializes SW1 (PA00) as input with pull-up configuration, active-LO. Enables the EIC Peripheral as well.
      *  Group 0: Address Spacing 0x00
@@ -94,7 +93,7 @@ void SW_1_Init(void){
     PORT_SEC_REGS->GROUP[0].PORT_PMUX[0] |= (0x0 << 0); // A Peripheral for PA00, PMUXE[3:0], required PMUXEN 1
 }
 
-void SW_2_Init(void){
+void SW_2_Init(void) {
     /*
      *  Initializes SW2 (PA01) as input with pull-up configuration, active-LO. Enables the EIC Peripheral as well.
      *  Group 0: Address Spacing 0x00

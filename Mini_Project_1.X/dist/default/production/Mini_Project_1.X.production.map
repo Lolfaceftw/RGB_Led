@@ -1,7 +1,7 @@
 Archive member included to satisfy reference by file (symbol)
 
 /opt/microchip/xc32/v4.45/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp/libpic32c.a(data_init.o)
-                              /tmp/ccnlTHqT.o (__pic32c_data_initialization)
+                              /tmp/ccYB0Tob.o (__pic32c_data_initialization)
 /opt/microchip/xc32/v4.45/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp/libm-fast-emfloat.a(__aeabi_fsub.o)
                               build/default/production/main.o (__aeabi_fsub)
 /opt/microchip/xc32/v4.45/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp/libm-fast-emfloat.a(__aeabi_fmul.o)
@@ -17,7 +17,7 @@ Archive member included to satisfy reference by file (symbol)
 /opt/microchip/xc32/v4.45/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp/libm-fast-emfloat.a(__aeabi_fadd.o)
                               /opt/microchip/xc32/v4.45/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp/libm-fast-emfloat.a(__aeabi_fsub.o) (.L__aeabi_fadd_fast_entry)
 /opt/microchip/xc32/v4.45/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp/libc-musl.a(__libc_start_main.o)
-                              /tmp/ccnlTHqT.o (__libc_init_array)
+                              /tmp/ccYB0Tob.o (__libc_init_array)
 /opt/microchip/xc32/v4.45/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp/libc-musl.a(libc.o)
                               /opt/microchip/xc32/v4.45/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp/libc-musl.a(__libc_start_main.o) (__progname_full)
 /opt/microchip/xc32/v4.45/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp/libc-musl.a(__environ.o)
@@ -89,7 +89,7 @@ Microchip PIC32 Memory-Usage Report By Module
         text        data         bss         dec         hex    basename                   filename
 --------------------------------------------------------------------------------
         5788          72          32        5892        1704    main.o                 build/default/production/main.o
-         476           0           0         476         1dc    ccnlTHqT.o             /tmp/ccnlTHqT.o
+         476           0           0         476         1dc    ccYB0Tob.o             /tmp/ccYB0Tob.o
          310           0           0         310         136    __aeabi_fadd.o         libm-fast-emfloat.a
          192           0           0         192          c0    data_init              data_init
          182           0           0         182          b6    __aeabi_fmul.o         libm-fast-emfloat.a
@@ -198,7 +198,7 @@ LOAD /opt/microchip/xc32/v4.45/bin/bin/../../lib/gcc/pic32c/8.3.1/thumb/v8-m.bas
 LOAD /opt/microchip/xc32/v4.45/bin/bin/../../lib/gcc/pic32c/8.3.1/thumb/v8-m.base/nofp/crtbegin.o
 LOAD build/default/production/main.o
                 0x0000000000000001                __MPLAB_BUILD = 0x1
-LOAD /tmp/ccnlTHqT.o
+LOAD /tmp/ccYB0Tob.o
 START GROUP
 LOAD /opt/microchip/xc32/v4.45/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp/libpic32c.a
 LOAD /opt/microchip/xc32/v4.45/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp/libc-size-musl.a
@@ -248,7 +248,7 @@ LOAD /opt/microchip/xc32/v4.45/bin/bin/../../lib/gcc/pic32c/8.3.1/thumb/v8-m.bas
                 0x0000000000000000                _sfixed = .
  *(.vectors .vectors.* .vectors_default .vectors_default.*)
  .vectors.default
-                0x0000000000000000      0x15c /tmp/ccnlTHqT.o
+                0x0000000000000000      0x15c /tmp/ccYB0Tob.o
                 0x0000000000000000                exception_table
  *(.isr_vector)
  *(.reset*)
@@ -339,7 +339,7 @@ LOAD stack
  .ARM.attributes
                 0x0000000000000052       0x30 build/default/production/main.o
  .ARM.attributes
-                0x0000000000000082       0x30 /tmp/ccnlTHqT.o
+                0x0000000000000082       0x30 /tmp/ccYB0Tob.o
  .ARM.attributes
                 0x00000000000000b2       0x30 /opt/microchip/xc32/v4.45/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp/libpic32c.a(data_init.o)
  .ARM.attributes
@@ -375,7 +375,7 @@ LOAD stack
  .comment       0x0000000000000000       0x2b /opt/microchip/xc32/v4.45/bin/bin/../../lib/gcc/pic32c/8.3.1/thumb/v8-m.base/nofp/crtbegin.o
                                          0x2c (size before relaxing)
  .comment       0x000000000000002b       0x2c build/default/production/main.o
- .comment       0x000000000000002b       0x2c /tmp/ccnlTHqT.o
+ .comment       0x000000000000002b       0x2c /tmp/ccYB0Tob.o
  .comment       0x000000000000002b       0x2c /opt/microchip/xc32/v4.45/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp/libpic32c.a(data_init.o)
  .comment       0x000000000000002b       0x2c /opt/microchip/xc32/v4.45/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp/libc-musl.a(__libc_start_main.o)
  .comment       0x000000000000002b       0x2c /opt/microchip/xc32/v4.45/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp/libc-musl.a(libc.o)
@@ -424,14 +424,14 @@ LOAD stack
  .debug_aranges
                 0x00000000000000c0       0x20 /opt/microchip/xc32/v4.45/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp/libpic32c.a(pic32_data_init_copy.o)
 
-.debug_line     0x0000000000000000      0xe0b
- .debug_line    0x0000000000000000      0x917 build/default/production/main.o
- .debug_line    0x0000000000000917       0x8e /opt/microchip/xc32/v4.45/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp/libpic32c.a(data_init.o)
- .debug_line    0x00000000000009a5      0x1bf /opt/microchip/xc32/v4.45/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp/libc-musl.a(__libc_start_main.o)
- .debug_line    0x0000000000000b64       0xb5 /opt/microchip/xc32/v4.45/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp/libc-musl.a(libc.o)
- .debug_line    0x0000000000000c19       0xfb /opt/microchip/xc32/v4.45/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp/libc-musl.a(__environ.o)
- .debug_line    0x0000000000000d14       0x6f /opt/microchip/xc32/v4.45/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp/libpic32c.a(pic32_data_init_clear.o)
- .debug_line    0x0000000000000d83       0x88 /opt/microchip/xc32/v4.45/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp/libpic32c.a(pic32_data_init_copy.o)
+.debug_line     0x0000000000000000      0xe0d
+ .debug_line    0x0000000000000000      0x919 build/default/production/main.o
+ .debug_line    0x0000000000000919       0x8e /opt/microchip/xc32/v4.45/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp/libpic32c.a(data_init.o)
+ .debug_line    0x00000000000009a7      0x1bf /opt/microchip/xc32/v4.45/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp/libc-musl.a(__libc_start_main.o)
+ .debug_line    0x0000000000000b66       0xb5 /opt/microchip/xc32/v4.45/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp/libc-musl.a(libc.o)
+ .debug_line    0x0000000000000c1b       0xfb /opt/microchip/xc32/v4.45/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp/libc-musl.a(__environ.o)
+ .debug_line    0x0000000000000d16       0x6f /opt/microchip/xc32/v4.45/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp/libpic32c.a(pic32_data_init_clear.o)
+ .debug_line    0x0000000000000d85       0x88 /opt/microchip/xc32/v4.45/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp/libpic32c.a(pic32_data_init_copy.o)
 
 .debug_str      0x0000000000000000     0x22e3
  .debug_str     0x0000000000000000     0x13ce build/default/production/main.o
@@ -517,7 +517,7 @@ LOAD stack
  .bss           0x0000000000000000        0x0 /opt/microchip/xc32/v4.45/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp/libc-musl.a(__libc_start_main.o)
 
 .bss%z6         0x0000000000000000        0x0
- .bss           0x0000000000000000        0x0 /tmp/ccnlTHqT.o
+ .bss           0x0000000000000000        0x0 /tmp/ccYB0Tob.o
 
 .bss%z7         0x0000000000000000        0x0
  .bss           0x0000000000000000        0x0 /opt/microchip/xc32/v4.45/bin/bin/../../lib/gcc/pic32c/8.3.1/thumb/v8-m.base/nofp/crti.o
@@ -561,7 +561,7 @@ LOAD stack
  .data          0x0000000000000000        0x0 /opt/microchip/xc32/v4.45/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp/libpic32c.a(data_init.o)
 
 .data%z16       0x0000000000000000        0x0
- .data          0x0000000000000000        0x0 /tmp/ccnlTHqT.o
+ .data          0x0000000000000000        0x0 /tmp/ccYB0Tob.o
 
 .eh_frame%z17   0x0000000000000000        0x0
  .eh_frame      0x0000000000000000        0x0 /opt/microchip/xc32/v4.45/bin/bin/../../lib/gcc/pic32c/8.3.1/thumb/v8-m.base/nofp/crtbegin.o
@@ -629,7 +629,7 @@ LOAD stack
 .text.Reset_Handler%14
                 0x0000000000001b5a       0x7e
  .text.Reset_Handler
-                0x0000000000001b5a       0x7e /tmp/ccnlTHqT.o
+                0x0000000000001b5a       0x7e /tmp/ccYB0Tob.o
                 0x0000000000001b5a                Reset_Handler
 
 .text.__libc_start_init%15
@@ -699,7 +699,7 @@ LOAD stack
 .text.Dummy_Handler%26
                 0x000000000000194e        0x2
  .text.Dummy_Handler
-                0x000000000000194e        0x2 /tmp/ccnlTHqT.o
+                0x000000000000194e        0x2 /tmp/ccYB0Tob.o
                 0x000000000000194e                SVCall_Handler
                 0x000000000000194e                SERCOM0_2_Handler
                 0x000000000000194e                EVSYS_0_Handler
@@ -807,7 +807,7 @@ LOAD stack
  .text          0x0000000000000000        0x0 /opt/microchip/xc32/v4.45/bin/bin/../../lib/gcc/pic32c/8.3.1/../../../../pic32c/lib/thumb/v8-m.base/nofp/libpic32c.a(data_init.o)
 
 .text%z27       0x0000000000000000        0x0
- .text          0x0000000000000000        0x0 /tmp/ccnlTHqT.o
+ .text          0x0000000000000000        0x0 /tmp/ccYB0Tob.o
 
 .text%z28       0x0000000000000000        0x0
  .text          0x0000000000000000        0x0 /opt/microchip/xc32/v4.45/bin/bin/../../lib/gcc/pic32c/8.3.1/thumb/v8-m.base/nofp/crti.o
