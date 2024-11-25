@@ -36,14 +36,6 @@ int colors[5][3] = {
     {16, 233, 110},
 };
 
-int read_count() {
-    // Allow read access of COUNT register
-    // Return back the counter value
-    TC0_REGS -> COUNT16.TC_CTRLBSET |= (0x4 << 5);
-    return TC0_REGS -> COUNT16.TC_COUNT; // 39.8.13
-
-}
-
 void TC0_Wait(void) {
     // Clear the interrupt flag for match compare 0
     TC0_REGS->COUNT16.TC_INTFLAG = (1 << 4);
@@ -147,7 +139,7 @@ void Adjust_Brightness(uint16_t adc_value) {
      * Since it is 10 bits, we want the multiplier to be 1 when ADC value is 0 (full clockwise) and vice versa.
      * @param adc_value: the adc value from the potentiometer reading.
      */
-    multiplier = 1 - (adc_value / 1028.0f);
+    multiplier = (adc_value / 1028.0f);
     TCC3_REGS->TCC_CC[1] = RGB_to_CC(multiplier * colors[i][0]);
     TCC3_REGS->TCC_CC[0] = RGB_to_CC(multiplier * colors[i][1]);
     TCC3_REGS->TCC_CC[3] = RGB_to_CC(multiplier * colors[i][2]);
@@ -165,13 +157,13 @@ void Adjust_Period_and_Direction(uint16_t adc_value) {
      * @param adc_value: from the potentiometer input.
      */
     if (IN_RANGE(adc_value, 0, 206)) {
-        normal = 1;
+        normal = 0;
         while (TC0_REGS->COUNT16.TC_SYNCBUSY & (1 << 0));
         TC0_REGS -> COUNT16.TC_CC[0] = (0x32C8);
         while (TC0_REGS->COUNT16.TC_SYNCBUSY & (1 << 0));
         freeze = 0;
     } else if (IN_RANGE(adc_value, 206, 410)) {
-        normal = 1;
+        normal = 0;
         while (TC0_REGS->COUNT16.TC_SYNCBUSY & (1 << 0));
         TC0_REGS -> COUNT16.TC_CC[0] = (0x32C8) * 2;
         while (TC0_REGS->COUNT16.TC_SYNCBUSY & (1 << 0));
@@ -180,13 +172,13 @@ void Adjust_Period_and_Direction(uint16_t adc_value) {
         freeze = 1;
         came_from_freeze = 1;
     } else if (IN_RANGE(adc_value, 614, 819)) {
-        normal = 0;
+        normal = 1;
         while (TC0_REGS->COUNT16.TC_SYNCBUSY & (1 << 0));
         TC0_REGS -> COUNT16.TC_CC[0] = (0x32C8) * 2;
         while (TC0_REGS->COUNT16.TC_SYNCBUSY & (1 << 0));
         freeze = 0;
     } else if (IN_RANGE(adc_value, 819, 1024)) {
-        normal = 0;
+        normal = 1;
         while (TC0_REGS->COUNT16.TC_SYNCBUSY & (1 << 0));
         TC0_REGS -> COUNT16.TC_CC[0] = (0x32C8);
         while (TC0_REGS->COUNT16.TC_SYNCBUSY & (1 << 0));
@@ -200,6 +192,6 @@ uint16_t RGB_to_CC(uint8_t x) {
      * @param x: Either R, G, or B.
      * @return: Appropriate CC PER value.
      */
-    return (uint16_t) (INIT_TOP * (1.0f - (float) x / 255.0f));
+    return (uint16_t) (INIT_TOP * (1 - (float) x / 255.0f));
 }
 #endif
